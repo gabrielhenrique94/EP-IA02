@@ -16,7 +16,7 @@ public class AlgoritmoGenetico {
 	 * @param cromossomos Populacao que sera analisada.
 	 * @param posicaoCidades Lugar que se encontra cada cidade que compoe as distancias nos cromossomos da populacao em um mapa.
 	 */
-	public void algoritmoGenetico(ArrayList<Cromossomo> cromossomos, HashMap<Integer, int[]> posicaoCidades) {
+	public static void algoritmoGenetico(ArrayList<Cromossomo> cromossomos, HashMap<Integer, int[]> posicaoCidades) {
 		/*
 		 * t <- 0
 		 * inicializar S(T)
