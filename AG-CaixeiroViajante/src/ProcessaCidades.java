@@ -9,7 +9,7 @@ public class ProcessaCidades {
 	 * @param sequenciaCidade
 	 * @return
 	 */
-	public int calculaPercurso(HashMap<Integer, int[]> posicaoCidades, ArrayList<Integer> sequenciaCidade) {
+	public static int calculaPercurso(HashMap<Integer, int[]> posicaoCidades, ArrayList<Integer> sequenciaCidade) {
 		int distanciaPercorrida = 0;
 		
 		/*
