@@ -30,6 +30,46 @@ public class AlgoritmoGenetico {
 		 * fim enquanto
 		 */
 		
+		
+		
+		//TESTE CROSSOVER OX
+		System.out.println("Crossover OX");
+		int n = cromossomos.size();
+		int pai1 = -1;
+		int pai2 = -1;
+		
+		while (pai1 == pai2) {
+			pai1 = intAleatorio(0, n-1);;
+			pai2 = intAleatorio(0, n-1);
+		}
+		
+		Cromossomo cpai1 = cromossomos.get(pai1);
+		Cromossomo cpai2 = cromossomos.get(pai2);
+		
+		System.out.print("Pai1: ");
+		ArrayList<Integer> gen1 = cpai1.getGenotipo();
+		for (int i = 0; i < gen1.size(); i++) {
+			System.out.print(gen1.get(i) + " ");
+		}
+		System.out.println();
+		
+		System.out.print("Pai2: ");
+		ArrayList<Integer> gen2 = cpai2.getGenotipo();
+		for (int i = 0; i < gen2.size(); i++) {
+			System.out.print(gen2.get(i) + " ");
+		}
+		System.out.println();
+		
+		
+		ArrayList<Cromossomo> filhos = crossoverOX(cpai1, cpai2, mapaCidades);
+		for (int j = 0; j < filhos.size(); j++) {
+			System.out.print("Filho"+j+": ");
+			for (int i = 0; i < filhos.get(j).getGenotipo().size(); i++) {
+				System.out.print(filhos.get(j).getGenotipo().get(i) + " ");
+			}
+			System.out.println();
+		}
+		
 	}
 	
 	/**
@@ -39,7 +79,7 @@ public class AlgoritmoGenetico {
 	 * @param mapaCidades
 	 * @return
 	 */
-	public ArrayList<Cromossomo> crossoverOX (Cromossomo pai1, Cromossomo pai2, HashMap<Integer, double[]> mapaCidades) {
+	public static ArrayList<Cromossomo> crossoverOX (Cromossomo pai1, Cromossomo pai2, HashMap<Integer, double[]> mapaCidades) {
 		/* Exemplo:
 		 * Parent 1: 8 4 7 |3 6 2 5 1| 9 0
 		   Parent 2: 0 |1 2 3| 4 |5 6| 7 8 9
@@ -64,6 +104,8 @@ public class AlgoritmoGenetico {
 			pf = intAleatorio(0, genes-1);
 		}
 		
+		System.out.println("Posições sorteadas:" + p0 + " " + pf);
+		
 		/* Copiando dados fixos*/
 		
 		int auxFixo = pf;
@@ -71,6 +113,13 @@ public class AlgoritmoGenetico {
 		// Mapa de cidades que ja estao nos filhos
 		Map<Integer, Boolean> mapaCidadesFilho1 = new HashMap<Integer, Boolean>();
 		Map<Integer, Boolean> mapaCidadesFilho2 = new HashMap<Integer, Boolean>();
+		
+		// inicializando mapas
+		for (int i = 1; i <= genes; i++) {
+			mapaCidadesFilho1.put(i, false);
+			mapaCidadesFilho2.put(i, false);
+		}
+		
 		
 		genotipoFilho1[p0] = genotipo1.get(p0);
 		genotipoFilho2[p0] = genotipo2.get(p0);
@@ -140,11 +189,11 @@ public class AlgoritmoGenetico {
 				filho2completo = true;
 			}
 			
-			int cidadeAux = genotipo2.get(posicaoPai1);
+			int cidadeAux = genotipo1.get(posicaoPai1);
 			
-			if (!mapaCidadesFilho1.get(cidadeAux)) {
-				genotipoFilho1[posicaoFilho2] = cidadeAux;
-				mapaCidadesFilho1.put(cidadeAux, true);
+			if (!mapaCidadesFilho2.get(cidadeAux)) {
+				genotipoFilho2[posicaoFilho2] = cidadeAux;
+				mapaCidadesFilho2.put(cidadeAux, true);
 				posicaoFilho2++;
 			}
 			
@@ -156,6 +205,7 @@ public class AlgoritmoGenetico {
 		ArrayList<Integer> seqFilho2 = new ArrayList<Integer>();
 		
 		for (int i = 0; i < genotipoFilho1.length; i++) {
+			
 			seqFilho1.add(genotipoFilho1[i]);
 			seqFilho2.add(genotipoFilho2[i]);
 		}
