@@ -14,9 +14,9 @@ public class AlgoritmoGenetico {
 	/**
 	 * Metodo chamado para iniciar um algoritmo genetico em cima de uma populacao.
 	 * @param cromossomos Populacao que sera analisada.
-	 * @param posicaoCidades Lugar que se encontra cada cidade que compoe as distancias nos cromossomos da populacao em um mapa.
+	 * @param mapaCidades Lugar que se encontra cada cidade que compoe as distancias nos cromossomos da populacao em um mapa.
 	 */
-	public static void algoritmoGenetico(ArrayList<Cromossomo> cromossomos, HashMap<Integer, int[]> posicaoCidades) {
+	public static void algoritmoGenetico(ArrayList<Cromossomo> cromossomos, HashMap<Integer, double[]> mapaCidades) {
 		/*
 		 * t <- 0
 		 * inicializar S(T)
@@ -36,10 +36,10 @@ public class AlgoritmoGenetico {
 	 * Metodo de order crossover (OX)
 	 * @param pai1
 	 * @param pai2
-	 * @param posicaoCidades
+	 * @param mapaCidades
 	 * @return
 	 */
-	public Cromossomo crossoverOX (Cromossomo pai1, Cromossomo pai2, HashMap<Integer, int[]> posicaoCidades) {
+	public Cromossomo crossoverOX (Cromossomo pai1, Cromossomo pai2, HashMap<Integer, double[]> mapaCidades) {
 		/* Exemplo:
 		 * Parent 1: 8 4 7 |3 6 2 5 1| 9 0
 		   Parent 2: 0 |1 2 3| 4 |5 6| 7 8 9
@@ -94,7 +94,7 @@ public class AlgoritmoGenetico {
 		    }
 		}
 		
-		Cromossomo filho = new Cromossomo(seqFilho, ProcessaCidades.calculaPercurso(posicaoCidades, seqFilho));
+		Cromossomo filho = new Cromossomo(seqFilho, ProcessaCidades.calculaPercurso(mapaCidades, seqFilho));
 		
 		return filho;
 		
@@ -104,10 +104,10 @@ public class AlgoritmoGenetico {
 	/**
 	 * Metodo de mutacao de genes, utilizando mutacao inversiva.
 	 * @param filho - cromossomo que sofrera mutacao
-	 * @param posicaoCidades
+	 * @param mapaCidades
 	 * @return
 	 */
-	public Cromossomo mutacaoInversiva(Cromossomo filho, HashMap<Integer, int[]> posicaoCidades) {
+	public Cromossomo mutacaoInversiva(Cromossomo filho, HashMap<Integer, double[]> mapaCidades) {
 		
 		ArrayList<Integer> seqFilho = filho.getGenotipo();
 		int aleatorio1 = -1;
@@ -125,7 +125,7 @@ public class AlgoritmoGenetico {
 		seqFilho.add(aleatorio2, cidade1);
 		
 		filho.setGenotipo(seqFilho);
-		filho.setFi(ProcessaCidades.calculaPercurso(posicaoCidades, seqFilho));
+		filho.setFi(ProcessaCidades.calculaPercurso(mapaCidades, seqFilho));
 		
 		return filho;
 	}
