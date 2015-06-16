@@ -7,14 +7,14 @@ public class Cromossomo {
 	private ArrayList<Integer> genotipo;
 	
 	/** Resultado da funcao de fitness: soma dos custos de movimentacao para a sequencia */
-	private int fi;
+	private double fi;
 	
 	/**
 	 * Contrutor
 	 * @param genotipo
 	 * @param fi
 	 */
-	public Cromossomo(ArrayList<Integer> genotipo, int fi) {
+	public Cromossomo(ArrayList<Integer> genotipo, double fi) {
 		this.setGenotipo(genotipo);
 		this.setFi(fi);
 	}
@@ -39,7 +39,7 @@ public class Cromossomo {
 	 * Retorna o atributo funcao de fitness(fi) do objeto
 	 * @return
 	 */
-	public int getFi() {
+	public double getFi() {
 		return fi;
 	}
 	
@@ -47,7 +47,7 @@ public class Cromossomo {
 	 * Atribui um novo valor ao atributo funcao de fitness(fi) do objeto
 	 * @param fi
 	 */
-	public void setFi(int fi) {
+	public void setFi(double fi) {
 		this.fi = fi;
 	}
 

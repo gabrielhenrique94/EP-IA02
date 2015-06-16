@@ -8,7 +8,7 @@ public class AlgoritmoGenetico {
 	/**
 	 * Taxa utilizada para verificar se deve ser realizado mutacao
 	 */
-	private static final double TAXA_MUTACAO = 0.04; // Recomendado < 5% (valor para variar nos testes)
+	private static final double TAXA_MUTACAO = 0.1; 
 	
 	
 	/**

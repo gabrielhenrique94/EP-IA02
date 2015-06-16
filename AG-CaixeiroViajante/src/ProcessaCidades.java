@@ -1,44 +1,42 @@
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class ProcessaCidades {
 	
-	public static HashMap<Integer, int[]> lerArquivoCidades(String arquivo) {
+	public static HashMap<Integer, double[]> lerArquivoCidades(String arquivo) {
 		BufferedReader br = null;
-		HashMap<Integer, int[]> mapaCidades = new HashMap<Integer, int[]>();
-		try {
+		HashMap<Integer, double[]> mapaCidades = new HashMap<Integer, double[]>();
+		
+		File file = new File(arquivo);
+		 
+        try {
  
-			String line;
- 
-			br = new BufferedReader(new FileReader(arquivo));
-			int count = 1;
-			
-			
-			while ((line = br.readLine()) != null) {
-				String[] valores = line.split(" ");
-				int[] coordenadas = new int[2];
+            Scanner scanner = new Scanner(file);
+            int count = 1;
+            
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] valores = line.split(" ");
+                double[] coordenadas = new double[2];
 				// Arrumar valores daqui.
-				coordenadas[0] = Integer.parseInt(valores[1].split("e")[0]);
-				coordenadas[1] = Integer.parseInt(valores[2].split("e")[0]);
+				coordenadas[0] = Double.parseDouble(valores[1]);
+				coordenadas[1] = Double.parseDouble(valores[2]);
 				mapaCidades.put(count, coordenadas);
 				count++;
-			}
- 
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (br != null) {
-					br.close();
-				}
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
-		}
-		return mapaCidades;
+                
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        
+        return mapaCidades;
 	}
 	
 	protected static ArrayList<ArrayList<Integer>> combinacoesCidades;
@@ -76,15 +74,15 @@ public class ProcessaCidades {
 	 * @param sequenciaCidade
 	 * @return
 	 */
-	public static int calculaPercurso(HashMap<Integer, int[]> posicaoCidades, ArrayList<Integer> sequenciaCidade) {
+	public static double calculaPercurso(HashMap<Integer, int[]> posicaoCidades, ArrayList<Integer> sequenciaCidade) {
 		int distanciaPercorrida = 0;
 		int cidadeAtual = sequenciaCidade.get(0);
 		
 		for (int i = 1; i < sequenciaCidade.size(); i++) {
 			int cidadeAux = sequenciaCidade.get(i);
-			distanciaPercorrida += (int) Math.ceil(Math.sqrt(
+			distanciaPercorrida += Math.sqrt(
 					(posicaoCidades.get(cidadeAtual)[0] - posicaoCidades.get(cidadeAux)[0]) + 
-					(posicaoCidades.get(cidadeAtual)[1] - posicaoCidades.get(cidadeAux)[1])));
+					(posicaoCidades.get(cidadeAtual)[1] - posicaoCidades.get(cidadeAux)[1]));
 			cidadeAtual = cidadeAux;
 		}
 		
