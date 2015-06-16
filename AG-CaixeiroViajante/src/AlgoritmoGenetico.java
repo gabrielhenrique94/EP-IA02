@@ -33,70 +33,140 @@ public class AlgoritmoGenetico {
 	}
 	
 	/**
-	 * Metodo de order crossover (OX)
+	 * Metodo order crossover (OX)
 	 * @param pai1
 	 * @param pai2
 	 * @param mapaCidades
 	 * @return
 	 */
-	public Cromossomo crossoverOX (Cromossomo pai1, Cromossomo pai2, HashMap<Integer, double[]> mapaCidades) {
+	public ArrayList<Cromossomo> crossoverOX (Cromossomo pai1, Cromossomo pai2, HashMap<Integer, double[]> mapaCidades) {
 		/* Exemplo:
 		 * Parent 1: 8 4 7 |3 6 2 5 1| 9 0
 		   Parent 2: 0 |1 2 3| 4 |5 6| 7 8 9
 				
 		   Child 1:  0 4 7 3 6 2 5 1 8 9
 		 */
-		ArrayList<Integer> seqPai1 = pai1.getGenotipo();
-		ArrayList<Integer> seqPai2 = pai2.getGenotipo();
+		ArrayList<Cromossomo> filhos = new ArrayList<Cromossomo>();
+		ArrayList<Integer> genotipo1 = pai1.getGenotipo();
+		ArrayList<Integer> genotipo2 = pai2.getGenotipo();
 		
-		ArrayList<Integer> seqFilho = new ArrayList<Integer>();
+		int genes = genotipo1.size();
 		
-		int genes = seqPai1.size();
+		int[] genotipoFilho1 = new int[genes];
+		int[] genotipoFilho2 = new int[genes];
 		
-		Map<Integer, Boolean> mascaraPai1 = new HashMap<Integer, Boolean>();
+		/*Posicao inicial e final*/
+		int p0 = -1;
+		int pf = -1;
 		
-		/* Inicializa Mascara Pai 1 */
-		for (int i = 0; i < genes; i++) {
-			mascaraPai1.put(i, false);
+		while (p0 == pf) {
+			p0 = intAleatorio(0, genes-1);;
+			pf = intAleatorio(0, genes-1);
 		}
 		
-		int aleatorio = intAleatorio(0, genes-1);
+		/* Copiando dados fixos*/
 		
-		int genesTrocados = genes/2;
+		int auxFixo = pf;
 		
-		while (genesTrocados > 0) {
-			if (aleatorio <= (genes-1) && !mascaraPai1.get(aleatorio)) {
-				mascaraPai1.put(aleatorio, true);
-				aleatorio++;
-				genesTrocados--;
-			} else if (aleatorio > (genes-1)) {
-				aleatorio = 0;
+		// Mapa de cidades que ja estao nos filhos
+		Map<Integer, Boolean> mapaCidadesFilho1 = new HashMap<Integer, Boolean>();
+		Map<Integer, Boolean> mapaCidadesFilho2 = new HashMap<Integer, Boolean>();
+		
+		genotipoFilho1[p0] = genotipo1.get(p0);
+		genotipoFilho2[p0] = genotipo2.get(p0);
+		
+		mapaCidadesFilho1.put(genotipo1.get(p0), true);
+		mapaCidadesFilho2.put(genotipo2.get(p0), true);
+		
+		while (auxFixo != p0) {
+			
+			genotipoFilho1[auxFixo] = genotipo1.get(auxFixo);
+			genotipoFilho2[auxFixo] = genotipo2.get(auxFixo);
+			
+			mapaCidadesFilho1.put(genotipo1.get(auxFixo), true);
+			mapaCidadesFilho2.put(genotipo2.get(auxFixo), true);
+			
+			if (auxFixo-1 < 0) {
+				auxFixo = genes-1;
+			} else {
+				auxFixo--;
 			}
 		}
 		
-		/* Criando filho*/
-		
-		ArrayList<Integer> novaSeqPai2 = new ArrayList<Integer>();
-		for (int i = 0; i < seqPai2.size(); i++) {
-			int cidade2 = seqPai2.get(i);
-			if (!mascaraPai1.get(cidade2)) {
-				novaSeqPai2.add(cidade2);
+		/*Completa Filho 1*/
+
+		boolean filho1completo = false;
+		int posicaoPai2 = pf + 1;
+		int posicaoFilho1 = pf + 1;
+		while (!filho1completo) {
+			if (posicaoPai2 == genes) {
+				posicaoPai2 = 0;
 			}
+			
+			if (posicaoFilho1 == genes) {
+				posicaoFilho1 = 0;
+			}
+			
+			if (posicaoPai2 == pf) {
+				filho1completo = true;
+			}
+			
+			int cidadeAux = genotipo2.get(posicaoPai2);
+			
+			if (!mapaCidadesFilho1.get(cidadeAux)) {
+				genotipoFilho1[posicaoFilho1] = cidadeAux;
+				mapaCidadesFilho1.put(cidadeAux, true);
+				posicaoFilho1++;
+			}
+			
+			posicaoPai2++;
 		}
 		
-		int contadorPai2 = 0;
-		for (Integer key : mascaraPai1.keySet()) {
-		    if(mascaraPai1.get(key)) {
-		    	seqFilho.add(seqPai1.get(key));
-		    } else {
-		    	seqFilho.add(novaSeqPai2.get(contadorPai2));
-		    	contadorPai2++;
-		    }
+		/*Completa Filho 2*/
+
+		boolean filho2completo = false;
+		int posicaoPai1 = pf + 1;
+		int posicaoFilho2 = pf + 1;
+		while (!filho2completo) {
+			if (posicaoPai1 == genes) {
+				posicaoPai1 = 0;
+			}
+			
+			if (posicaoFilho2 == genes) {
+				posicaoFilho2 = 0;
+			}
+			
+			if (posicaoPai1 == pf) {
+				filho2completo = true;
+			}
+			
+			int cidadeAux = genotipo2.get(posicaoPai1);
+			
+			if (!mapaCidadesFilho1.get(cidadeAux)) {
+				genotipoFilho1[posicaoFilho2] = cidadeAux;
+				mapaCidadesFilho1.put(cidadeAux, true);
+				posicaoFilho2++;
+			}
+			
+			posicaoPai1++;
 		}
 		
-		Cromossomo filho = new Cromossomo(seqFilho, ProcessaCidades.calculaPercurso(mapaCidades, seqFilho));
+		/*Gerando o cromossomo dos filhos*/
+		ArrayList<Integer> seqFilho1 = new ArrayList<Integer>();
+		ArrayList<Integer> seqFilho2 = new ArrayList<Integer>();
 		
-		return filho;
+		for (int i = 0; i < genotipoFilho1.length; i++) {
+			seqFilho1.add(genotipoFilho1[i]);
+			seqFilho2.add(genotipoFilho2[i]);
+		}
+		
+		Cromossomo filho1 = new Cromossomo(seqFilho1, ProcessaCidades.calculaPercurso(mapaCidades, seqFilho1));
+		Cromossomo filho2 = new Cromossomo(seqFilho2, ProcessaCidades.calculaPercurso(mapaCidades, seqFilho2));
+		
+		filhos.add(filho1);
+		filhos.add(filho2);
+		
+		return filhos;
 		
 		
 	}

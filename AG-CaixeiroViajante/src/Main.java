@@ -10,9 +10,9 @@ public class Main {
 		HashMap<Integer, double[]> mapaCidades = ProcessaCidades.lerArquivoCidades("src/arquivos/ncit6.txt");
 		
 		ArrayList<Cromossomo> populacao = ProcessaCidades.criaPopulacao(mapaCidades);
-		/*
+		
 		AlgoritmoGenetico.algoritmoGenetico(populacao, mapaCidades);
-*/
+
 	}
 
 }
