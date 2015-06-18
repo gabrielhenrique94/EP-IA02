@@ -90,31 +90,55 @@ public class AlgoritmoGenetico {
 		
 
 		selecionarSubpopulacao();
-		
-		this.setPopulacaoTotal(new ArrayList<Cromossomo>()); // ZERA POPULACAO TOTAL
-		
-		for (int i = 0; i < getCromossomosSelecionados().size(); i++) {
-			this.populacaoTotal.addAll(getCromossomosNaoSelecionados().get(i)); //ACRESCENTA CROMOSSOMOS NAO SELECIONADOS
-			this.populacaoTotal.addAll(getCromossomosSelecionados().get(i)); //ACRESCENTA CROMOSSOMOS SELECIONADOS
-			// Talvez gere muitos ruins aqui -- possivelmente teremos que tratar os nao selecionados futuramente.
-		}
-		
-		int n = cromossomos.size();
-		int pai1 = -1;
-		int pai2 = -1;
-		
-		while (pai1 == pai2) {
-			pai1 = Helpers.intAleatorio(0, n-1);;
-			pai2 = Helpers.intAleatorio(0, n-1);
-		}
-		
-		Cromossomo cpai1 = cromossomos.get(pai1);
-		Cromossomo cpai2 = cromossomos.get(pai2);
+		// TODO: Avaliar
+		/*TODO: Tem que fazer a condição de parada que eu nao faco ideia de qual seja*/
+		while(true) {
+			this.setPopulacaoTotal(new ArrayList<Cromossomo>()); // ZERA POPULACAO TOTAL
+			
+			for (int i = 0; i < getCromossomosSelecionados().size(); i++) {
+				ArrayList<Cromossomo> subpopulacao = getCromossomosSelecionados().get(i);
+				// TODO: APLICAR OUTRO METODO DE SELECAO PARA ESCOLHER QUEM VAI FAZER CROSSOVER E MUTACAO
+				int pai1 = -1; // com ESSA SELECAO ALTERAR ESSES PAIS
+				int pai2 = -1;
 				
-		ArrayList<Cromossomo> filhos = Crossover.crossoverOX(cpai1, cpai2, mapaCidades);
-
-		Cromossomo c = Mutacao.mutacaoInversiva(filhos.get(0), mapaCidades);
-
+				/*ISSO E ROLETA RUSSA sem nenhum parameto de escolha*/
+				while (pai1 == pai2) {
+					pai1 = Helpers.intAleatorio(0, subpopulacao.size() -1);
+					pai2 = Helpers.intAleatorio(0, subpopulacao.size() -1);
+				}
+				
+				Cromossomo cpai1 = cromossomos.get(pai1);
+				Cromossomo cpai2 = cromossomos.get(pai2);
+				
+				//TODO: Nao tenho certeza em quem aplicar crossover , se é somente nesses dois pais que vc gera, ou se vc gera varios
+				
+				/*Aplica Crossover nesses filhos*/
+				ArrayList<Cromossomo> filhos = Crossover.crossoverOX(cpai1, cpai2, mapaCidades);
+				
+				/*Testa se quer fazer mutacao*/
+				for (int j = 0; j < filhos.size(); j++) {
+					if (Math.random() < TAXA_MUTACAO) {
+						Cromossomo c = Mutacao.mutacaoInversiva(filhos.get(j), mapaCidades);
+						// TODO: Aqui ta cru precisa arrumar
+					}
+				}
+				
+				// TODO: Regerar o selecionados com os novos filhos e removendo os ruins (tem que ver como escolhe)
+				
+			}
+			
+			
+			// TODO: Depois de aplicar os crossover e mutacoes tem que juntar a populacao inteira e começar tudo de novo
+			for (int i = 0; i < getCromossomosSelecionados().size(); i++) {
+				this.populacaoTotal.addAll(getCromossomosNaoSelecionados().get(i)); //ACRESCENTA CROMOSSOMOS NAO SELECIONADOS
+				this.populacaoTotal.addAll(getCromossomosSelecionados().get(i)); //ACRESCENTA CROMOSSOMOS SELECIONADOS
+				// Talvez gere muitos ruins aqui -- possivelmente teremos que tratar os nao selecionados futuramente.
+			}
+			
+			selecionarSubpopulacao();
+			// TODO: Avaliar
+			
+		}
 		
 	}
 	
