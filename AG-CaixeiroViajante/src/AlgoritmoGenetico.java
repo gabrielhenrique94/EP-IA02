@@ -19,12 +19,12 @@ public class AlgoritmoGenetico {
 	/**
 	 * Cromossomos nao selecionados durante um periodo de selecao
 	 */
-	ArrayList<Cromossomo> cromossomosNaoSelecionados = new ArrayList<Cromossomo>();
+	ArrayList<ArrayList<Cromossomo>> cromossomosNaoSelecionados = new ArrayList<ArrayList<Cromossomo>>();
 	
 	/**
 	 * Cromossomos selecionados para um periodo de selecao
 	 */
-	ArrayList<Cromossomo> cromossomosSelecionados = new ArrayList<Cromossomo>();
+	ArrayList<ArrayList<Cromossomo>> cromossomosSelecionados = new ArrayList<ArrayList<Cromossomo>>();
 	
 	/**
 	 * Mapa das coordenadas de cada cidade 
@@ -93,9 +93,11 @@ public class AlgoritmoGenetico {
 		
 		this.setPopulacaoTotal(new ArrayList<Cromossomo>()); // ZERA POPULACAO TOTAL
 		
-		this.populacaoTotal.addAll(getCromossomosNaoSelecionados()); //ACRESCENTA CROMOSSOMOS NAO SELECIONADOS
-		this.populacaoTotal.addAll(getCromossomosSelecionados()); //ACRESCENTA CROMOSSOMOS SELECIONADOS
-		
+		for (int i = 0; i < getCromossomosSelecionados().size(); i++) {
+			this.populacaoTotal.addAll(getCromossomosNaoSelecionados().get(i)); //ACRESCENTA CROMOSSOMOS NAO SELECIONADOS
+			this.populacaoTotal.addAll(getCromossomosSelecionados().get(i)); //ACRESCENTA CROMOSSOMOS SELECIONADOS
+			// Talvez gere muitos ruins aqui -- possivelmente teremos que tratar os nao selecionados futuramente.
+		}
 		
 		int n = cromossomos.size();
 		int pai1 = -1;
@@ -125,8 +127,8 @@ public class AlgoritmoGenetico {
 		//Se der tempo fazer varios selecionar e usar um por vez.
 		// int aleatorio = intAleatorio(1, 3);
 	
-		setCromossomosSelecionados(new ArrayList<Cromossomo>()); //ZERAR SELECIONADOS
-		setCromossomosNaoSelecionados(new ArrayList<Cromossomo>()); //ZERAR NAO SELECIONADOS
+		setCromossomosSelecionados(new ArrayList<ArrayList<Cromossomo>>()); //ZERAR SELECIONADOS
+		setCromossomosNaoSelecionados(new ArrayList<ArrayList<Cromossomo>>()); //ZERAR NAO SELECIONADOS
 		
 		
 		selecaoTorneio();
@@ -140,6 +142,7 @@ public class AlgoritmoGenetico {
 	 */
 	private void selecaoTorneio() {
 		ArrayList<Cromossomo> ganhadores = new ArrayList<Cromossomo>();
+		ArrayList<Cromossomo> perdedores = new ArrayList<Cromossomo>();
 		
 		Map<Cromossomo,Cromossomo> torneio = new HashMap<Cromossomo,Cromossomo>();
 		Map<Cromossomo,Boolean> ganhadoresUnicos = new HashMap<Cromossomo,Boolean>();
@@ -169,11 +172,14 @@ public class AlgoritmoGenetico {
 		// Filtra os campeos para colocar em um arraylist
 		for ( Cromossomo key : ganhadoresUnicos.keySet() ) {
 		    if (ganhadoresUnicos.get(key)) {
-		    	this.cromossomosSelecionados.add(key);
+		    	ganhadores.add(key);
 		    } else {
-		    	this.cromossomosNaoSelecionados.add(key);
+		    	perdedores.add(key);
 		    }
 		}
+		
+		this.cromossomosSelecionados.add(ganhadores);
+		this.cromossomosNaoSelecionados.add(perdedores);
 	
 	}
 
@@ -194,24 +200,24 @@ public class AlgoritmoGenetico {
 	}
 
 
-	public ArrayList<Cromossomo> getCromossomosNaoSelecionados() {
+	public ArrayList<ArrayList<Cromossomo>> getCromossomosNaoSelecionados() {
 		return cromossomosNaoSelecionados;
 	}
 
 
 	public void setCromossomosNaoSelecionados(
-			ArrayList<Cromossomo> cromossomosNaoSelecionados) {
+			ArrayList<ArrayList<Cromossomo>> cromossomosNaoSelecionados) {
 		this.cromossomosNaoSelecionados = cromossomosNaoSelecionados;
 	}
 
 
-	public ArrayList<Cromossomo> getCromossomosSelecionados() {
+	public ArrayList<ArrayList<Cromossomo>> getCromossomosSelecionados() {
 		return cromossomosSelecionados;
 	}
 
 
 	public void setCromossomosSelecionados(
-			ArrayList<Cromossomo> cromossomosSelecionados) {
+			ArrayList<ArrayList<Cromossomo>> cromossomosSelecionados) {
 		this.cromossomosSelecionados = cromossomosSelecionados;
 	}
 
