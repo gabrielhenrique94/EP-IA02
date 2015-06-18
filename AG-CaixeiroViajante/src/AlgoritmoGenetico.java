@@ -1,9 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 public class AlgoritmoGenetico {
 	
@@ -13,9 +11,9 @@ public class AlgoritmoGenetico {
 	private static final double TAXA_MUTACAO = 0.1; 
 	
 	/**
-	 * Armazena a populacao pura inicial
+	 * Armazena a populacao total
 	 */
-	ArrayList<Cromossomo> cromossomosIniciais = new ArrayList<Cromossomo>();
+	ArrayList<Cromossomo> populacaoTotal = new ArrayList<Cromossomo>();
 
 
 	/**
@@ -34,7 +32,7 @@ public class AlgoritmoGenetico {
 	HashMap<Integer, double[]> mapaCidades = new HashMap<Integer, double[]>();
 	
 	public AlgoritmoGenetico(ArrayList<Cromossomo> cromossomos, HashMap<Integer, double[]> mapaCidades ) {
-		this.cromossomosIniciais = cromossomos;
+		this.populacaoTotal = cromossomos;
 		this.mapaCidades = mapaCidades;
 	}
 	
@@ -59,7 +57,13 @@ public class AlgoritmoGenetico {
 		 */
 		
 		int t = 0;
-		ArrayList<Cromossomo> s = selecionarSubpopulacao(cromossomos);
+		selecionarSubpopulacao();
+		System.out.println(getCromossomosSelecionados().size());
+		
+		this.setPopulacaoTotal(new ArrayList<Cromossomo>()); // ZERA POPULACAO TOTAL
+		
+		this.populacaoTotal.addAll(getCromossomosNaoSelecionados()); //ACRESCENTA CROMOSSOMOS NAO SELECIONADOS
+		this.populacaoTotal.addAll(getCromossomosSelecionados()); //ACRESCENTA CROMOSSOMOS SELECIONADOS
 		
 		//TESTE CROSSOVER OX
 		System.out.println("Crossover OX");
@@ -114,13 +118,16 @@ public class AlgoritmoGenetico {
 	 * @param cromossomos
 	 * @return
 	 */
-	private ArrayList<Cromossomo> selecionarSubpopulacao(ArrayList<Cromossomo> cromossomos) {
+	private void selecionarSubpopulacao() {
 		//Se der tempo fazer varios selecionar e usar um por vez.
 		// int aleatorio = intAleatorio(1, 3);
-
-		ArrayList<Cromossomo> subpopulacao = selecaoTorneio(cromossomos);
+	
+		setCromossomosSelecionados(new ArrayList<Cromossomo>()); //ZERAR SELECIONADOS
+		setCromossomosNaoSelecionados(new ArrayList<Cromossomo>()); //ZERAR NAO SELECIONADOS
 		
-		return subpopulacao;
+		
+		selecaoTorneio();
+
 	}
 	
 	/**
@@ -128,20 +135,20 @@ public class AlgoritmoGenetico {
 	 * @param cromossomos
 	 * @return
 	 */
-	private ArrayList<Cromossomo> selecaoTorneio(ArrayList<Cromossomo> cromossomos) {
+	private void selecaoTorneio() {
 		ArrayList<Cromossomo> ganhadores = new ArrayList<Cromossomo>();
 		
 		Map<Cromossomo,Cromossomo> torneio = new HashMap<Cromossomo,Cromossomo>();
 		Map<Cromossomo,Boolean> ganhadoresUnicos = new HashMap<Cromossomo,Boolean>();
 		
-		for (int i = 0; i < cromossomos.size(); i++) {
+		for (int i = 0; i < getPopulacaoTotal().size(); i++) {
 			Boolean achaConcorrente = false;
 			while (!achaConcorrente) {
-				int aleatorio = intAleatorio(0, cromossomos.size()-1);
-				Cromossomo concorrente = cromossomos.get(aleatorio);
-				if (cromossomos.get(i).compareTo(concorrente) == 0) {
-					torneio.put(cromossomos.get(i), concorrente);
-					ganhadoresUnicos.put(cromossomos.get(i), false);
+				int aleatorio = intAleatorio(0, getPopulacaoTotal().size()-1);
+				Cromossomo concorrente = getPopulacaoTotal().get(aleatorio);
+				if (getPopulacaoTotal().get(i).compareTo(concorrente) == 0) {
+					torneio.put(getPopulacaoTotal().get(i), concorrente);
+					ganhadoresUnicos.put(getPopulacaoTotal().get(i), false);
 					achaConcorrente = true;
 				}
 			}
@@ -159,11 +166,12 @@ public class AlgoritmoGenetico {
 		// Filtra os campeos para colocar em um arraylist
 		for ( Cromossomo key : ganhadoresUnicos.keySet() ) {
 		    if (ganhadoresUnicos.get(key)) {
-		    	ganhadores.add(key);
+		    	this.cromossomosSelecionados.add(key);
+		    } else {
+		    	this.cromossomosNaoSelecionados.add(key);
 		    }
 		}
-		
-		return ganhadores;
+	
 	}
 
 	/**
@@ -369,13 +377,13 @@ public class AlgoritmoGenetico {
 	
 	/** GETTERS AND SETTERS*/
 	
-	public ArrayList<Cromossomo> getCromossomosIniciais() {
-		return cromossomosIniciais;
+	public ArrayList<Cromossomo> getPopulacaoTotal() {
+		return populacaoTotal;
 	}
 
 
-	public void setCromossomosIniciais(ArrayList<Cromossomo> cromossomosIniciais) {
-		this.cromossomosIniciais = cromossomosIniciais;
+	public void setPopulacaoTotal(ArrayList<Cromossomo> cromossomosIniciais) {
+		this.populacaoTotal = cromossomosIniciais;
 	}
 
 
