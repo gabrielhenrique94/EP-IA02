@@ -1,7 +1,9 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 public class AlgoritmoGenetico {
 	
@@ -10,13 +12,39 @@ public class AlgoritmoGenetico {
 	 */
 	private static final double TAXA_MUTACAO = 0.1; 
 	
+	/**
+	 * Armazena a populacao pura inicial
+	 */
+	ArrayList<Cromossomo> cromossomosIniciais = new ArrayList<Cromossomo>();
+
+
+	/**
+	 * Cromossomos nao selecionados durante um periodo de selecao
+	 */
+	ArrayList<Cromossomo> cromossomosNaoSelecionados = new ArrayList<Cromossomo>();
+	
+	/**
+	 * Cromossomos selecionados para um periodo de selecao
+	 */
+	ArrayList<Cromossomo> cromossomosSelecionados = new ArrayList<Cromossomo>();
+	
+	/**
+	 * Mapa das coordenadas de cada cidade 
+	 */
+	HashMap<Integer, double[]> mapaCidades = new HashMap<Integer, double[]>();
+	
+	public AlgoritmoGenetico(ArrayList<Cromossomo> cromossomos, HashMap<Integer, double[]> mapaCidades ) {
+		this.cromossomosIniciais = cromossomos;
+		this.mapaCidades = mapaCidades;
+	}
+	
 	
 	/**
 	 * Metodo chamado para iniciar um algoritmo genetico em cima de uma populacao.
 	 * @param cromossomos Populacao que sera analisada.
 	 * @param mapaCidades Lugar que se encontra cada cidade que compoe as distancias nos cromossomos da populacao em um mapa.
 	 */
-	public static void algoritmoGenetico(ArrayList<Cromossomo> cromossomos, HashMap<Integer, double[]> mapaCidades) {
+	void algoritmoGenetico(ArrayList<Cromossomo> cromossomos, HashMap<Integer, double[]> mapaCidades) {
 		/*
 		 * t <- 0
 		 * inicializar S(T)
@@ -30,7 +58,8 @@ public class AlgoritmoGenetico {
 		 * fim enquanto
 		 */
 		
-		
+		int t = 0;
+		ArrayList<Cromossomo> s = selecionarSubpopulacao(cromossomos);
 		
 		//TESTE CROSSOVER OX
 		System.out.println("Crossover OX");
@@ -81,13 +110,70 @@ public class AlgoritmoGenetico {
 	}
 	
 	/**
+	 * Seleciona subpopulacao de um conjunto de cromossomos
+	 * @param cromossomos
+	 * @return
+	 */
+	private ArrayList<Cromossomo> selecionarSubpopulacao(ArrayList<Cromossomo> cromossomos) {
+		//Se der tempo fazer varios selecionar e usar um por vez.
+		// int aleatorio = intAleatorio(1, 3);
+
+		ArrayList<Cromossomo> subpopulacao = selecaoTorneio(cromossomos);
+		
+		return subpopulacao;
+	}
+	
+	/**
+	 * Selecao por torneio
+	 * @param cromossomos
+	 * @return
+	 */
+	private ArrayList<Cromossomo> selecaoTorneio(ArrayList<Cromossomo> cromossomos) {
+		ArrayList<Cromossomo> ganhadores = new ArrayList<Cromossomo>();
+		
+		Map<Cromossomo,Cromossomo> torneio = new HashMap<Cromossomo,Cromossomo>();
+		Map<Cromossomo,Boolean> ganhadoresUnicos = new HashMap<Cromossomo,Boolean>();
+		
+		for (int i = 0; i < cromossomos.size(); i++) {
+			Boolean achaConcorrente = false;
+			while (!achaConcorrente) {
+				int aleatorio = intAleatorio(0, cromossomos.size()-1);
+				Cromossomo concorrente = cromossomos.get(aleatorio);
+				if (cromossomos.get(i).compareTo(concorrente) == 0) {
+					torneio.put(cromossomos.get(i), concorrente);
+					ganhadoresUnicos.put(cromossomos.get(i), false);
+					achaConcorrente = true;
+				}
+			}
+		}
+		
+		// Faz torneio para achar os campeoes
+		for ( Cromossomo key : torneio.keySet() ) {
+		    if (key.getFi() > torneio.get(key).getFi()) {
+		    	ganhadoresUnicos.put(key, true);
+		    } else {
+		    	ganhadoresUnicos.put(torneio.get(key), true);
+		    }
+		}
+		
+		// Filtra os campeos para colocar em um arraylist
+		for ( Cromossomo key : ganhadoresUnicos.keySet() ) {
+		    if (ganhadoresUnicos.get(key)) {
+		    	ganhadores.add(key);
+		    }
+		}
+		
+		return ganhadores;
+	}
+
+	/**
 	 * Metodo order crossover (OX)
 	 * @param pai1
 	 * @param pai2
 	 * @param mapaCidades
 	 * @return
 	 */
-	public static ArrayList<Cromossomo> crossoverOX (Cromossomo pai1, Cromossomo pai2, HashMap<Integer, double[]> mapaCidades) {
+	private ArrayList<Cromossomo> crossoverOX (Cromossomo pai1, Cromossomo pai2, HashMap<Integer, double[]> mapaCidades) {
 		
 		ArrayList<Cromossomo> filhos = new ArrayList<Cromossomo>();
 		ArrayList<Integer> genotipo1 = pai1.getGenotipo();
@@ -230,7 +316,7 @@ public class AlgoritmoGenetico {
 	 * @param mapaCidades
 	 * @return
 	 */
-	public static Cromossomo mutacaoInversiva(Cromossomo filho, HashMap<Integer, double[]> mapaCidades) {
+	private Cromossomo mutacaoInversiva(Cromossomo filho, HashMap<Integer, double[]> mapaCidades) {
 		
 		ArrayList<Integer> seqAtualFilho = filho.getGenotipo();
 		ArrayList<Integer> seqNovaFilho = new ArrayList<Integer>();
@@ -272,12 +358,46 @@ public class AlgoritmoGenetico {
 	 * @param max
 	 * @return
 	 */
-	public static int intAleatorio(int min, int max) {
+	public int intAleatorio(int min, int max) {
 	    Random random = new Random();
 
 	    int randomNum = random.nextInt((max - min) + 1) + min;
 
 	    return randomNum;
+	}
+	
+	
+	/** GETTERS AND SETTERS*/
+	
+	public ArrayList<Cromossomo> getCromossomosIniciais() {
+		return cromossomosIniciais;
+	}
+
+
+	public void setCromossomosIniciais(ArrayList<Cromossomo> cromossomosIniciais) {
+		this.cromossomosIniciais = cromossomosIniciais;
+	}
+
+
+	public ArrayList<Cromossomo> getCromossomosNaoSelecionados() {
+		return cromossomosNaoSelecionados;
+	}
+
+
+	public void setCromossomosNaoSelecionados(
+			ArrayList<Cromossomo> cromossomosNaoSelecionados) {
+		this.cromossomosNaoSelecionados = cromossomosNaoSelecionados;
+	}
+
+
+	public ArrayList<Cromossomo> getCromossomosSelecionados() {
+		return cromossomosSelecionados;
+	}
+
+
+	public void setCromossomosSelecionados(
+			ArrayList<Cromossomo> cromossomosSelecionados) {
+		this.cromossomosSelecionados = cromossomosSelecionados;
 	}
 
 }
