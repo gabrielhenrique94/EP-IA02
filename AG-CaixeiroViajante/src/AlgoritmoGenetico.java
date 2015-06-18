@@ -54,62 +54,65 @@ public class AlgoritmoGenetico {
 		 * 		aplicar mutação sobre S(t) se TAXA_MUTAÇAO VALIDAR
 		 * 		avaliar S(t)
 		 * fim enquanto
+		 * 
+		 * 
+		 * EXEMPLO CLODS DE IMPLEMENTACAO:
+		 * Gera a população Inicial  - igual ao TamPop
+			Avalio cada cromossomo
+			numero gerações = 0;
+			Enquanto numero geração menor que o maximo
+			     Incrementa o numero de gerações
+			     Gera um subpopulação
+			             Aplica Roleta - dois inidividuos aleatorios
+			             Crossover
+			              Mutação
+			     Gera um subpopulação
+			             Aplica Roleta - Melhor Individuo e 1 aleatorio
+			             Crossover
+			             Mutação
+			
+			     Gera um subpopulação aleatoria
+			
+			     Concante todas as subpopulação + população inicial (ou somente os melhores)
+			    
+			      Avalia a toda a população
+			
+			     Aplica o criterio de seleção e seleciona o individuos para a proxima geração
+			
+			    Avalia este individuos
+			
+			    Verifica se população convergiu
+			
+			     Se sim break
+			
+			FimEnquanto
 		 */
 		
-		int t = 0;
+
 		selecionarSubpopulacao();
-		System.out.println(getCromossomosSelecionados().size());
 		
 		this.setPopulacaoTotal(new ArrayList<Cromossomo>()); // ZERA POPULACAO TOTAL
 		
 		this.populacaoTotal.addAll(getCromossomosNaoSelecionados()); //ACRESCENTA CROMOSSOMOS NAO SELECIONADOS
 		this.populacaoTotal.addAll(getCromossomosSelecionados()); //ACRESCENTA CROMOSSOMOS SELECIONADOS
 		
-		//TESTE CROSSOVER OX
-		System.out.println("Crossover OX");
+		
 		int n = cromossomos.size();
 		int pai1 = -1;
 		int pai2 = -1;
 		
 		while (pai1 == pai2) {
-			pai1 = intAleatorio(0, n-1);;
-			pai2 = intAleatorio(0, n-1);
+			pai1 = Helpers.intAleatorio(0, n-1);;
+			pai2 = Helpers.intAleatorio(0, n-1);
 		}
 		
 		Cromossomo cpai1 = cromossomos.get(pai1);
 		Cromossomo cpai2 = cromossomos.get(pai2);
-		
-		System.out.print("Pai1: ");
-		ArrayList<Integer> gen1 = cpai1.getGenotipo();
-		for (int i = 0; i < gen1.size(); i++) {
-			System.out.print(gen1.get(i) + " ");
-		}
-		System.out.println();
-		
-		System.out.print("Pai2: ");
-		ArrayList<Integer> gen2 = cpai2.getGenotipo();
-		for (int i = 0; i < gen2.size(); i++) {
-			System.out.print(gen2.get(i) + " ");
-		}
-		System.out.println();
-		
-		
-		ArrayList<Cromossomo> filhos = crossoverOX(cpai1, cpai2, mapaCidades);
-		for (int j = 0; j < filhos.size(); j++) {
-			System.out.print("Filho"+j+": ");
-			for (int i = 0; i < filhos.get(j).getGenotipo().size(); i++) {
-				System.out.print(filhos.get(j).getGenotipo().get(i) + " ");
-			}
-			System.out.println();
-		}
-		
-		// Teste mutação
-		System.out.println("Mutação no cromossomo filho 0");
-		Cromossomo c = mutacaoInversiva(filhos.get(0), mapaCidades);
-		for (int i = 0; i < filhos.get(0).getGenotipo().size(); i++) {
-			System.out.print(filhos.get(0).getGenotipo().get(i) + " ");
-		}
-		System.out.println();
+				
+		ArrayList<Cromossomo> filhos = Crossover.crossoverOX(cpai1, cpai2, mapaCidades);
+
+		Cromossomo c = Mutacao.mutacaoInversiva(filhos.get(0), mapaCidades);
+
 		
 	}
 	
@@ -144,7 +147,7 @@ public class AlgoritmoGenetico {
 		for (int i = 0; i < getPopulacaoTotal().size(); i++) {
 			Boolean achaConcorrente = false;
 			while (!achaConcorrente) {
-				int aleatorio = intAleatorio(0, getPopulacaoTotal().size()-1);
+				int aleatorio = Helpers.intAleatorio(0, getPopulacaoTotal().size()-1);
 				Cromossomo concorrente = getPopulacaoTotal().get(aleatorio);
 				if (getPopulacaoTotal().get(i).compareTo(concorrente) == 0) {
 					torneio.put(getPopulacaoTotal().get(i), concorrente);
@@ -174,205 +177,9 @@ public class AlgoritmoGenetico {
 	
 	}
 
-	/**
-	 * Metodo order crossover (OX)
-	 * @param pai1
-	 * @param pai2
-	 * @param mapaCidades
-	 * @return
-	 */
-	private ArrayList<Cromossomo> crossoverOX (Cromossomo pai1, Cromossomo pai2, HashMap<Integer, double[]> mapaCidades) {
-		
-		ArrayList<Cromossomo> filhos = new ArrayList<Cromossomo>();
-		ArrayList<Integer> genotipo1 = pai1.getGenotipo();
-		ArrayList<Integer> genotipo2 = pai2.getGenotipo();
-		
-		int genes = genotipo1.size();
-		
-		int[] genotipoFilho1 = new int[genes];
-		int[] genotipoFilho2 = new int[genes];
-		
-		/*Posicao inicial e final*/
-		int p0 = -1;
-		int pf = -1;
-		
-		while (p0 == pf) {
-			p0 = intAleatorio(0, genes-1);;
-			pf = intAleatorio(0, genes-1);
-		}
-		
-		System.out.println("Posições sorteadas:" + p0 + " " + pf);
-		
-		/* Copiando dados fixos*/
-		
-		int auxFixo = pf;
-		
-		// Mapa de cidades que ja estao nos filhos
-		Map<Integer, Boolean> mapaCidadesFilho1 = new HashMap<Integer, Boolean>();
-		Map<Integer, Boolean> mapaCidadesFilho2 = new HashMap<Integer, Boolean>();
-		
-		// inicializando mapas
-		for (int i = 1; i <= genes; i++) {
-			mapaCidadesFilho1.put(i, false);
-			mapaCidadesFilho2.put(i, false);
-		}
-		
-		
-		genotipoFilho1[p0] = genotipo1.get(p0);
-		genotipoFilho2[p0] = genotipo2.get(p0);
-		
-		mapaCidadesFilho1.put(genotipo1.get(p0), true);
-		mapaCidadesFilho2.put(genotipo2.get(p0), true);
-		
-		while (auxFixo != p0) {
-			
-			genotipoFilho1[auxFixo] = genotipo1.get(auxFixo);
-			genotipoFilho2[auxFixo] = genotipo2.get(auxFixo);
-			
-			mapaCidadesFilho1.put(genotipo1.get(auxFixo), true);
-			mapaCidadesFilho2.put(genotipo2.get(auxFixo), true);
-			
-			if (auxFixo-1 < 0) {
-				auxFixo = genes-1;
-			} else {
-				auxFixo--;
-			}
-		}
-		
-		/*Completa Filho 1*/
-
-		boolean filho1completo = false;
-		int posicaoPai2 = pf + 1;
-		int posicaoFilho1 = pf + 1;
-		while (!filho1completo) {
-			if (posicaoPai2 == genes) {
-				posicaoPai2 = 0;
-			}
-			
-			if (posicaoFilho1 == genes) {
-				posicaoFilho1 = 0;
-			}
-			
-			if (posicaoPai2 == pf) {
-				filho1completo = true;
-			}
-			
-			int cidadeAux = genotipo2.get(posicaoPai2);
-			
-			if (!mapaCidadesFilho1.get(cidadeAux)) {
-				genotipoFilho1[posicaoFilho1] = cidadeAux;
-				mapaCidadesFilho1.put(cidadeAux, true);
-				posicaoFilho1++;
-			}
-			
-			posicaoPai2++;
-		}
-		
-		/*Completa Filho 2*/
-
-		boolean filho2completo = false;
-		int posicaoPai1 = pf + 1;
-		int posicaoFilho2 = pf + 1;
-		while (!filho2completo) {
-			if (posicaoPai1 == genes) {
-				posicaoPai1 = 0;
-			}
-			
-			if (posicaoFilho2 == genes) {
-				posicaoFilho2 = 0;
-			}
-			
-			if (posicaoPai1 == pf) {
-				filho2completo = true;
-			}
-			
-			int cidadeAux = genotipo1.get(posicaoPai1);
-			
-			if (!mapaCidadesFilho2.get(cidadeAux)) {
-				genotipoFilho2[posicaoFilho2] = cidadeAux;
-				mapaCidadesFilho2.put(cidadeAux, true);
-				posicaoFilho2++;
-			}
-			
-			posicaoPai1++;
-		}
-		
-		/*Gerando o cromossomo dos filhos*/
-		ArrayList<Integer> seqFilho1 = new ArrayList<Integer>();
-		ArrayList<Integer> seqFilho2 = new ArrayList<Integer>();
-		
-		for (int i = 0; i < genotipoFilho1.length; i++) {
-			
-			seqFilho1.add(genotipoFilho1[i]);
-			seqFilho2.add(genotipoFilho2[i]);
-		}
-		
-		Cromossomo filho1 = new Cromossomo(seqFilho1, ProcessaCidades.calculaPercurso(mapaCidades, seqFilho1));
-		Cromossomo filho2 = new Cromossomo(seqFilho2, ProcessaCidades.calculaPercurso(mapaCidades, seqFilho2));
-		
-		filhos.add(filho1);
-		filhos.add(filho2);
-		
-		return filhos;
-		
-		
-	}
-	
-	/**
-	 * Metodo de mutacao de genes, utilizando mutacao inversiva.
-	 * @param filho - cromossomo que sofrera mutacao
-	 * @param mapaCidades
-	 * @return
-	 */
-	private Cromossomo mutacaoInversiva(Cromossomo filho, HashMap<Integer, double[]> mapaCidades) {
-		
-		ArrayList<Integer> seqAtualFilho = filho.getGenotipo();
-		ArrayList<Integer> seqNovaFilho = new ArrayList<Integer>();
-		int aleatorio1 = -1;
-		int aleatorio2 = -1;
-		
-		while (aleatorio1 == aleatorio2 ) {
-			aleatorio1 = intAleatorio(0, seqAtualFilho.size()-1);
-			aleatorio2 = intAleatorio(0, seqAtualFilho.size()-1);
-		}
-		System.out.println("Posicoes de mutação: " +aleatorio1+" " + aleatorio2);
-
-		
-		/*Troca as cidades de posicao*/
-		int cidade1 = seqAtualFilho.get(aleatorio1);
-		int cidade2 = seqAtualFilho.get(aleatorio2);
-
-		for (int i = 0; i < seqAtualFilho.size(); i++) {
-			if (i == aleatorio2) {
-				seqNovaFilho.add(cidade1);
-			} else if (i == aleatorio1) {
-				seqNovaFilho.add(cidade2);
-			} else {
-				seqNovaFilho.add(seqAtualFilho.get(i));
-			}
-			
-		}
-		
-		filho.setGenotipo(seqNovaFilho);
-		filho.setFi(ProcessaCidades.calculaPercurso(mapaCidades, seqNovaFilho));
-		
-		return filho;
-	}
 	
 	
-	/**
-	 * Gera um valor inteiro no intervalo [min;max]
-	 * @param min
-	 * @param max
-	 * @return
-	 */
-	public int intAleatorio(int min, int max) {
-	    Random random = new Random();
-
-	    int randomNum = random.nextInt((max - min) + 1) + min;
-
-	    return randomNum;
-	}
+	
 	
 	
 	/** GETTERS AND SETTERS*/
