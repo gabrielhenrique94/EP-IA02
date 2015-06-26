@@ -4,7 +4,7 @@ import java.util.HashMap;
 public class Mutacao {
 	/**
 	 * Metodo de mutacao de genes, utilizando mutacao inversiva.
-	 * 
+	 *
 	 * @param filho
 	 *            - cromossomo que sofrera mutacao
 	 * @param mapaCidades
@@ -57,7 +57,7 @@ public class Mutacao {
 
 		valor = seqAtualFilho.get(posicaoAlelo);
 
-		for (int i = posicaoAlelo + 1; i < aleatorio + 1; i++) {
+		for (int i = posicaoAlelo; i < aleatorio; i++) {
 			seqNovaFilho.add(i, seqAtualFilho.get(i + 1));
 		}
 
