@@ -2,44 +2,52 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Mutacao {
+	
+	/**
+	 * Taxa utilizada para verificar se deve ser realizado mutacao
+	 */
+	private static final double TAXA_MUTACAO = 0.1;
+	
 	/**
 	 * Metodo de mutacao de genes, utilizando mutacao inversiva.
 	 *
-	 * @param filho
-	 *            - cromossomo que sofrera mutacao
+	 * @param filho - cromossomo que sofrera mutacao
 	 * @param mapaCidades
 	 * @return
 	 */
-	public static Cromossomo mutacaoInversiva(Cromossomo filho,
-			HashMap<Integer, double[]> mapaCidades) {
+	public static Cromossomo mutacaoInversiva(Cromossomo filho, HashMap<Integer, double[]> mapaCidades) {
 
-		ArrayList<Integer> seqAtualFilho = filho.getGenotipo();
-		ArrayList<Integer> seqNovaFilho = new ArrayList<Integer>();
-		int aleatorio1 = -1;
-		int aleatorio2 = -1;
-
-		while (aleatorio1 == aleatorio2) {
-			aleatorio1 = Helpers.intAleatorio(0, seqAtualFilho.size() - 1);
-			aleatorio2 = Helpers.intAleatorio(0, seqAtualFilho.size() - 1);
-		}
-
-		/* Troca as cidades de posicao */
-		int cidade1 = seqAtualFilho.get(aleatorio1);
-		int cidade2 = seqAtualFilho.get(aleatorio2);
-
-		for (int i = 0; i < seqAtualFilho.size(); i++) {
-			if (i == aleatorio2) {
-				seqNovaFilho.add(cidade1);
-			} else if (i == aleatorio1) {
-				seqNovaFilho.add(cidade2);
-			} else {
-				seqNovaFilho.add(seqAtualFilho.get(i));
+		ArrayList<Integer> genotipo = filho.getGenotipo();
+	
+		/*Fazer teste de mutacao para pelo menos o numero de alelos no cromossomo*/
+		for (int i = 0; i < genotipo.size(); i++) {
+			if (Math.random() <= TAXA_MUTACAO) {
+				int aleatorio1 = -1;
+				int aleatorio2 = -1;
+	
+				while (aleatorio1 == aleatorio2) {
+					aleatorio1 = Helpers.intAleatorio(0, genotipo.size() - 1);
+					aleatorio2 = Helpers.intAleatorio(0, genotipo.size() - 1);
+				}
+		
+			
+				/* Troca as cidades de posicao */ 
+				int cidade1 = genotipo.get(aleatorio1);
+				int cidade2 = genotipo.get(aleatorio2);
+				
+				genotipo.remove(aleatorio1);
+				genotipo.add(aleatorio1, cidade2);
+				
+				genotipo.remove(aleatorio2);
+				genotipo.add(aleatorio2, cidade1);
 			}
-
+						
 		}
 
-		filho.setGenotipo(seqNovaFilho);
-		filho.setFi(ProcessaCidades.calculaPercurso(mapaCidades, seqNovaFilho));
+	
+		
+		filho.setGenotipo(genotipo);
+		filho.setFi(ProcessaCidades.calculaPercurso(mapaCidades, genotipo));
 
 		return filho;
 	}

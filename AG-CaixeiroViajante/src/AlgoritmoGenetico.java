@@ -4,10 +4,7 @@ import java.util.Map;
 
 public class AlgoritmoGenetico {
 
-	/**
-	 * Taxa utilizada para verificar se deve ser realizado mutacao
-	 */
-	private static final double TAXA_MUTACAO = 0.1;
+	
 
 	/**
 	 * Armazena a populacao total
@@ -86,7 +83,7 @@ public class AlgoritmoGenetico {
 		 * TODO: Tem que fazer a condi√ß√£o de parada que eu nao faco ideia de
 		 * qual seja
 		 */
-		while (true) {
+		
 			this.setPopulacaoTotal(new ArrayList<Cromossomo>()); // ZERA
 			// POPULACAO
 			// TOTAL
@@ -114,11 +111,12 @@ public class AlgoritmoGenetico {
 				/* Aplica Crossover nesses filhos */
 				ArrayList<Cromossomo> filhos = Crossover.crossoverOX(cpai1,
 						cpai2, mapaCidades);
-
-				/* Testa se quer fazer mutacao */
+				System.out.println("aqui");
+				Cromossomo c = Mutacao.mutacaoInversiva(filhos.get(0), mapaCidades);
+				/* Testa se quer fazer mutacao 
 				for (int j = 0; j < filhos.size(); j++) {
 					Cromossomo filho = filhos.get(j);
-					for (int k = 0; k < filho.getGenotipo().size(); k++) { // N„o sei se vai dar certo do jeito qeu est·
+					for (int k = 0; k < filho.getGenotipo().size(); k++) { // NÔøΩo sei se vai dar certo do jeito qeu estÔøΩ
 
 						if (Math.random() < TAXA_MUTACAO) {
 							//Cromossomo c = Mutacao.mutacaoInversiva(filhos.get(j), mapaCidades);
@@ -127,7 +125,7 @@ public class AlgoritmoGenetico {
 							// TODO: Aqui ta cru precisa arrumar
 						}
 					}
-				}
+				}*/
 
 				// TODO: Regerar o selecionados com os novos filhos e removendo
 				// os ruins (tem que ver como escolhe)
@@ -151,7 +149,6 @@ public class AlgoritmoGenetico {
 
 		}
 
-	}
 
 	/**
 	 * Seleciona subpopulacao de um conjunto de cromossomos
