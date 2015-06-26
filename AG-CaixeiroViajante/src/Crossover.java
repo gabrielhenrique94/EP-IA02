@@ -3,6 +3,45 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Crossover {
+
+	/**
+	 * Taxa utilizada para verificar se deve ser realizado crossover no cromossomo
+	 */
+	private static final double TAXA_CROSSOVER = 0.85;
+
+
+	/**
+	 * Cria uma subpopulacao de cromossomos por meio da aplicacao de crossover
+	 * @param populacao
+	 * @param mapaCidades
+	 * @return
+	 */
+	public static ArrayList<Cromossomo> selecaoCrossover (ArrayList<Cromossomo> populacao, HashMap<Integer, double[]> mapaCidades) {
+		ArrayList<Cromossomo> subpopulacaoCrossover = new ArrayList<Cromossomo>();
+		// Sorteia pelo menos o numero de vezes para todos os elementos terem chance de ser sorteados
+		for (int i = 0; i < populacao.size(); i++) {
+			if (Math.random() <= TAXA_CROSSOVER) {
+				int pai1 = -1; // com ESSA SELECAO ALTERAR ESSES PAIS
+				int pai2 = -1;
+
+				/* ISSO E ROLETA RUSSA sem nenhum parameto de escolha */
+				while (pai1 == pai2) {
+					pai1 = Helpers.intAleatorio(0, populacao.size() - 1);
+					pai2 = Helpers.intAleatorio(0, populacao.size() - 1);
+				}
+
+				Cromossomo cpai1 = populacao.get(pai1);
+				Cromossomo cpai2 = populacao.get(pai2);
+
+				/* Filhos 1 e 2 gerados */
+				ArrayList<Cromossomo> filhos = Crossover.crossoverOX(cpai1, cpai2, mapaCidades);
+				subpopulacaoCrossover.addAll(filhos);
+			}
+		}
+
+		return subpopulacaoCrossover;
+	}
+
 	/**
 	 * Metodo order crossover (OX)
 	 * 
@@ -149,4 +188,5 @@ public class Crossover {
 		return filhos;
 
 	}
+
 }
