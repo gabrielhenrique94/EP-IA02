@@ -49,4 +49,48 @@ public class Selecao {
 		return ganhadores;
 
 	}
+
+	/**
+	 * Selecao pelo metodo de roleta russa, com a certeza de manter o melhor
+	 * @param populacao
+	 * @param n numero de individuos que devem ser selecionados
+	 * @return
+	 */
+	public static ArrayList<Cromossomo> selecaoRoletaRussaMelhor(ArrayList<Cromossomo> populacao, int n) {
+		ArrayList<Cromossomo> novaPopulacao = new ArrayList<Cromossomo>();
+		Cromossomo melhorIndividuo = melhorIndividuo(populacao);
+		novaPopulacao.add(melhorIndividuo);
+		populacao.remove(melhorIndividuo);
+		int numIndividuos = 1;
+
+		while (numIndividuos != n) {
+			int aleatorio = Helpers.intAleatorio(0, populacao.size() - 1);
+			Cromossomo escolhido = populacao.get(aleatorio);
+
+			novaPopulacao.add(escolhido);
+			populacao.remove(aleatorio);
+			numIndividuos++;
+		}
+
+		return novaPopulacao;
+
+	}
+
+	/**
+	 * Pega melhor individuo da populacao
+	 * @param populacao
+	 * @return
+	 */
+	public static Cromossomo melhorIndividuo(ArrayList<Cromossomo> populacao) {
+		Cromossomo melhorIndividuo = populacao.get(0);
+
+		for (int i = 0; i < populacao.size(); i++) {
+			Cromossomo c = populacao.get(i);
+			if (c.getFi() > melhorIndividuo.getFi()) {
+				melhorIndividuo = c;
+			}
+		}
+
+		return melhorIndividuo;
+	}
 }

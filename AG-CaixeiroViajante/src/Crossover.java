@@ -68,11 +68,10 @@ public class Crossover {
 
 		while (p0 == pf) {
 			p0 = Helpers.intAleatorio(0, genes - 1);
-			;
 			pf = Helpers.intAleatorio(0, genes - 1);
 		}
 
-		// System.out.println("Posições sorteadas:" + p0 + " " + pf);
+
 
 		/* Copiando dados fixos */
 

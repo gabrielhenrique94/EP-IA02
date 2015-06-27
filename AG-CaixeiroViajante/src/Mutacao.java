@@ -19,7 +19,8 @@ public class Mutacao {
 
 		// Faz mutacao, ou pelo menos tenta fazer, em todos os cromossomos da populacao, criando uma populacao do mesmo tamanho da original
 		for (int i = 0; i < populacao.size(); i++) {
-			subpopulacaoCrossover.add(mutacaoInversiva(populacao.get(i), mapaCidades));
+			Cromossomo cromossomo = populacao.get(i);
+			subpopulacaoCrossover.add(mutacaoInversiva(cromossomo, mapaCidades));
 		}
 		return subpopulacaoCrossover;
 	}
@@ -32,7 +33,6 @@ public class Mutacao {
 	 * @return
 	 */
 	public static Cromossomo mutacaoInversiva(Cromossomo filho, HashMap<Integer, double[]> mapaCidades) {
-
 		ArrayList<Integer> genotipo = filho.getGenotipo();
 
 		/*Fazer teste de mutacao para pelo menos o numero de alelos no cromossomo*/
