@@ -1,3 +1,7 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -21,25 +25,50 @@ public class Backtracking {
 	 * @param posicaoCidades
 	 * @return
 	 */
-	public static ArrayList<Cromossomo> criaPopulacaoBacktracking (HashMap<Integer, double[]> mapaCidades) {
-		ArrayList<Cromossomo> populacao = new ArrayList<Cromossomo>();
+	public static void criaPopulacaoBacktracking (HashMap<Integer, double[]> mapaCidades) {
 
-		/* Inicializa as cidade disponiveis*/
-		int[] cidades = new int[mapaCidades.size()];
-		for (int i = 1; i <= cidades.length; i++) {
-			cidades[i-1] = i;
+		try {
+			File file = new File("src/arquivos/populacao_completa.csv");
+
+			// if file doesnt exists, then create it
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+
+
+
+
+			ArrayList<Cromossomo> populacao = new ArrayList<Cromossomo>();
+
+			/* Inicializa as cidade disponiveis*/
+			int[] cidades = new int[mapaCidades.size()];
+			for (int i = 1; i <= cidades.length; i++) {
+				cidades[i-1] = i;
+			}
+
+			/*cria todas as possiveis combinacoes de percurso entre as cidades*/
+			permutaCidades(cidades, 0, cidades.length);
+
+			/*cria cromossomo para cada combinacao de cidade criada*/
+			for (int i = 0; i < combinacoesCidades.size(); i++) {
+				Cromossomo novo = new Cromossomo(combinacoesCidades.get(i), ProcessaCidades.calculaPercurso(mapaCidades, combinacoesCidades.get(i)));
+				for (int j=0;j<novo.getGenotipo().size();j++) {
+					bw.write(novo.getGenotipo().get(j) + ";");
+
+				}
+				bw.write(novo.getFi() + "\n");
+				populacao.add(novo);
+			}
+
+
+			bw.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-
-		/*cria todas as possiveis combinacoes de percurso entre as cidades*/
-		permutaCidades(cidades, 0, cidades.length);
-
-		/*cria cromossomo para cada combinacao de cidade criada*/
-		for (int i = 0; i < combinacoesCidades.size(); i++) {
-			Cromossomo novo = new Cromossomo(combinacoesCidades.get(i), ProcessaCidades.calculaPercurso(mapaCidades, combinacoesCidades.get(i)));
-			populacao.add(novo);
-		}
-
-		return populacao;
 
 	}
 

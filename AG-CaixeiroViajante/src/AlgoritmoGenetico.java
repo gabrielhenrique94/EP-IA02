@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 public class AlgoritmoGenetico {
@@ -46,19 +45,71 @@ public class AlgoritmoGenetico {
 	public void iniciaAlgoritmoGenetico() {
 		int t = 0;
 		System.out.println("Gerações: " + geracoesMaximas);
-		ArrayList<Cromossomo> geracaoFinal = this.getPopulacao();
+		ArrayList<Cromossomo> geracaoFinal = selecionaNovaPopulacao(this.getPopulacao(), this.mapaCidades);
+		boolean populacaoAdaptada = false;
 
-		while (t < this.geracoesMaximas) {
+		while (!populacaoAdaptada && t < this.geracoesMaximas) {
 			System.out.println("Geraçao: " + t + " Populacao: " + geracaoFinal.size());
-			ArrayList<Cromossomo> novaPopulacao = selecionarSubpopulacao(geracaoFinal, this.mapaCidades);
-			geracaoFinal = avaliaPopulacao(novaPopulacao);
-			Collections.shuffle(geracaoFinal);
+			populacaoAdaptada = avaliarPopulacao(geracaoFinal);
+
+			if (!populacaoAdaptada) {
+				geracaoFinal = selecionaNovaPopulacao(geracaoFinal, this.mapaCidades);
+			} else {
+				populacaoAdaptada = true;
+			}
 			t++;
 		}
-
+		Cromossomo vencedor = Selecao.melhorIndividuo(geracaoFinal);
+		System.out.println("Melhor Cromossomo");
+		for (int i = 0;i<vencedor.getGenotipo().size();i++) {
+			System.out.print(vencedor.getGenotipo().get(i)+" ");
+		}
+		System.out.println();
+		System.out.println(vencedor.getFi());
 		System.out.println("FIM GA");
 	}
 
+	private boolean avaliarPopulacao(ArrayList<Cromossomo> populacao) {
+		boolean populacaoAdaptada = false;
+		int igualdade = 5;
+		int countSemelhantes = 0;
+
+		for (int i = 0; i < populacao.size();i++) {
+			int achaConcorrente = 0;
+			while (countSemelhantes < igualdade && achaConcorrente < populacao.size()) {
+				int aleatorio = Helpers.intAleatorio(0, populacao.size() - 1);
+				Cromossomo concorrente = populacao.get(aleatorio);
+				if (populacao.get(i).compareTo(concorrente) == 1) {
+					countSemelhantes++;
+				}
+				achaConcorrente++;
+
+			}
+			countSemelhantes = 0;
+		}
+
+		if(countSemelhantes >= igualdade) {
+			populacaoAdaptada = true;
+		}
+
+		return populacaoAdaptada;
+	}
+
+	/**
+	 * Seleciona uma populacao nova a partir de uma populacao gerada por subpopulacoes que sofreram interferencias
+	 * @param populacao
+	 * @param mapaCidades
+	 * @return
+	 */
+	private ArrayList<Cromossomo> selecionaNovaPopulacao(ArrayList<Cromossomo> populacao, HashMap<Integer, double[]> mapaCidades){
+		/*Gera populacao com subpopulacoes*/
+		ArrayList<Cromossomo> subPopulacao= selecionarSubpopulacao(populacao, mapaCidades);
+
+		// Aplica roleta russa em cima dos melhores, porem escolhe o melhor de todos de qualquer forma
+		subPopulacao = Selecao.selecaoRoletaRussaMelhor(subPopulacao, this.numIndividuos);
+
+		return subPopulacao;
+	}
 
 	/**
 	 * Seleciona subpopulacao de um conjunto de cromossomos
@@ -81,20 +132,6 @@ public class AlgoritmoGenetico {
 		novaPopulacao.addAll(subpopulacaoMutacoes);
 
 		return novaPopulacao;
-	}
-
-	private ArrayList<Cromossomo> avaliaPopulacao(ArrayList<Cromossomo> populacao){
-		System.out.println("Avalia");
-		ArrayList<Cromossomo> populacaoAdaptada = new ArrayList<Cromossomo>();
-
-		// Realiza selecao por torneio para pegar os melhores
-
-		populacaoAdaptada = Selecao.selecaoTorneio(populacao);
-		System.out.println("Populacao Apos torneio: " + populacaoAdaptada.size());
-		// Aplica roleta russa em cima dos melhores, porem escolhe o melhor de todos de qualquer forma
-		populacaoAdaptada = Selecao.selecaoRoletaRussaMelhor(populacaoAdaptada, this.numIndividuos);
-		System.out.println("Populacao Apos Roleta: " + populacaoAdaptada.size());
-		return populacaoAdaptada;
 	}
 
 	public ArrayList<Cromossomo> getPopulacao() {
@@ -128,7 +165,4 @@ public class AlgoritmoGenetico {
 	public void setNumIndividuos(int numIndividuos) {
 		this.numIndividuos = numIndividuos;
 	}
-
-
-
 }
