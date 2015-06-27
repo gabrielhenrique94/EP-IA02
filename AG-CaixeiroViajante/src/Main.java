@@ -6,7 +6,7 @@ public class Main {
 	public static void main(String[] args) {
 
 		/* Gera um mapa com a posicao de cada cidade nele, no formato {num_cidade: [x, y]} */
-		HashMap<Integer, double[]> mapaCidades = ProcessaCidades.lerArquivoCidades("src/arquivos/ncit6.txt");
+		HashMap<Integer, double[]> mapaCidades = ProcessaCidades.lerArquivoCidades("src/arquivos/ncit100.txt");
 
 		/* Tamanho da populacao que se deseja testar*/
 		int n = 10;
