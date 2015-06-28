@@ -234,14 +234,12 @@ public class Crossover {
 			HFilho1.add(genotipoPai2.get(posicao));
 			posicoesPai2F1.add(posicao);
 		}
-		System.out.println(HFilho1);
 
 		//Pega as posicoes do pai 1
 		for(int contador = 0; contador < genotipoPai1.size(); contador++){
 			boolean a = HFilho1.add(genotipoPai1.get(contador));
 			if (a) posicoesPai1F1.add(contador);
 		}
-		System.out.println(HFilho1);
 
 		//Preenchendo vetor
 		Iterator<Integer> It = HFilho1.iterator();
@@ -255,7 +253,6 @@ public class Crossover {
 				genotipoFilho1[aux] = valor;
 				mapaCidadesFilho1.put(genotipoPai2.get(aux), true);
 			}
-			System.out.println(genotipoFilho1);
 			valor = 0;
 			//Adicionando cidades adivindas do pai1
 			for(int contador = 0, contaux= 0; contador < genotipoFilho1.length; contaux++, contador++){
@@ -269,7 +266,6 @@ public class Crossover {
 					mapaCidadesFilho1.put(genotipoPai1.get(aux), true);
 				}
 			}
-			System.out.println(genotipoFilho1);
 		}
 
 		//Gerando Filho 2
@@ -285,14 +281,12 @@ public class Crossover {
 			HFilho1.add(genotipoPai1.get(posicao));
 			posicoesPai1F2.add(posicao);
 		}
-		System.out.println(HFilho2);
 
 		//Pega as posicoes do pai 2
 		for(int contador = 0; contador < genotipoPai2.size(); contador++){
 			boolean a = HFilho2.add(genotipoPai2.get(contador));
 			if (a) posicoesPai2F2.add(contador);
 		}
-		System.out.println(HFilho2);
 
 		//Preenchendo vetor
 		Iterator<Integer> IteratorF2 = HFilho2.iterator();
@@ -306,7 +300,6 @@ public class Crossover {
 				genotipoFilho2[aux] = valor;
 				mapaCidadesFilho2.put(genotipoPai1.get(aux), true);
 			}
-			System.out.println(genotipoFilho2);
 			valor = 0;
 			//Adicionando cidades adivindas do pai2
 			for(int contador = 0, contaux= 0; contador < genotipoFilho2.length; contaux++, contador++){
@@ -320,18 +313,7 @@ public class Crossover {
 					mapaCidadesFilho2.put(genotipoPai2.get(aux), true);
 				}
 			}
-			System.out.println(genotipoFilho1);
-
 		}
-
-		System.out.println("Pai1");
-		System.out.println(genotipoPai1);
-		System.out.println("Pai1");
-		System.out.println(genotipoPai2);
-		System.out.println("Filho1");
-		System.out.println(genotipoFilho1);
-		System.out.println("Filho2");
-		System.out.println(genotipoFilho2);
 
 		// Gerando o cromossomo dos filhos
 		ArrayList<Integer> seqFilho1 = new ArrayList<Integer>();
