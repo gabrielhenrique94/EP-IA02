@@ -9,7 +9,7 @@ public class Main {
 		HashMap<Integer, double[]> mapaCidades = ProcessaCidades.lerArquivoCidades("src/arquivos/ncit100.txt");
 
 		/* Tamanho da populacao que se deseja testar*/
-		int n = 150;
+		int n = 10;
 
 		/* Valor maximo de cidades*/
 		int v = mapaCidades.size();
@@ -21,7 +21,7 @@ public class Main {
 		ArrayList<Cromossomo> populacao = ProcessaCidades.criaPopulacao(n, v, mapaCidades);
 
 		/* Numero de geracoes que o algoritmo genetico deve gerar*/
-		int geracoes = 100;
+		int geracoes = 10;
 
 		/* Passa a populacao completa e o mapa das cidades para o algoritmo genetico que sera responsavel por executar o processo */
 		AlgoritmoGenetico ag = new AlgoritmoGenetico(populacao, mapaCidades, geracoes, n);

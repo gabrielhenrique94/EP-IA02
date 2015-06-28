@@ -20,8 +20,8 @@ public class Mutacao {
 		// Faz mutacao, ou pelo menos tenta fazer, em todos os cromossomos da populacao, criando uma populacao do mesmo tamanho da original
 		for (int i = 0; i < populacao.size(); i++) {
 			Cromossomo cromossomo = populacao.get(i);
-			//subpopulacaoCrossover.add(mutacaoInversiva(cromossomo, mapaCidades));
-			subpopulacaoCrossover.add(mutacaoPorPosicao(cromossomo, mapaCidades));
+			subpopulacaoCrossover.add(mutacaoInversiva(cromossomo, mapaCidades));
+			//subpopulacaoCrossover.add(mutacaoPorPosicao(cromossomo, mapaCidades));
 		}
 		return subpopulacaoCrossover;
 	}
@@ -76,36 +76,49 @@ public class Mutacao {
 		int aleatorio = -1;
 		int valor = -1;
 
-		/* Joga cidade para posicao 'aleatorio' */
 		for (int i = 0; i < seqAtualFilho.size(); i++) {
 			if (Math.random() <= TAXA_MUTACAO) {
 				posicaoAlelo = i;
+
 				aleatorio = Helpers.intAleatorio(0, seqAtualFilho.size()-1);
 				valor = seqAtualFilho.get(posicaoAlelo);
+				int valor2 = -1;
 
-				if(aleatorio>i){
-					for (int j=i;j<aleatorio; j++){
-
-						seqNovaFilho.remove(j);
-						seqNovaFilho.add(j, seqAtualFilho.get(j+1));
+				if(aleatorio>posicaoAlelo){
+					for (int j=posicaoAlelo;j<aleatorio; j++){
+						valor2= seqAtualFilho.get(j+1);
+						seqNovaFilho.add(j, valor2 );
 
 					}
-					seqNovaFilho.remove(aleatorio);
 					seqNovaFilho.add(aleatorio, valor);
-				}
-				if(aleatorio<i){
+
+				}else if(aleatorio<i){
+
 					for (int j=i;j>aleatorio; j--){
-						seqNovaFilho.remove(j);
-						seqNovaFilho.add(j, seqAtualFilho.get(j-1));
+						valor2= seqAtualFilho.get(j-1);
+						seqNovaFilho.add(j, valor2);
 					}
-					seqNovaFilho.remove(aleatorio);
 					seqNovaFilho.add(aleatorio, valor);
-				}
-				filho.setGenotipo(seqNovaFilho);
-				filho.setFi(ProcessaCidades.calculaPercurso(mapaCidades, seqNovaFilho));
-			}
-		}
 
+				}else continue;
+
+
+
+				System.out.println("Sequencia antiga com aleatorio = "+ aleatorio + " alelo= "+ posicaoAlelo);
+
+				for(int m=0; m< seqAtualFilho.size();m++){
+					System.out.print(" "+ seqAtualFilho.get(m));
+				}
+				System.out.println("Sequencia nova : ");
+				for(int n=0; n< seqAtualFilho.size();n++){
+					System.out.print(" "+ seqNovaFilho.get(n));
+				}
+			}
+
+
+		}
+		filho.setGenotipo(seqNovaFilho);
+		filho.setFi(ProcessaCidades.calculaPercurso(mapaCidades, seqNovaFilho));
 
 
 		return filho;
