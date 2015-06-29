@@ -16,7 +16,7 @@ public class Mutacao {
 		for (int i = 0; i < populacao.size(); i++) {
 			Cromossomo cromossomo = populacao.get(i);
 			subpopulacaoCrossover.add(mutacaoInversiva(cromossomo, mapaCidades, taxaMutacao));
-			//subpopulacaoCrossover.add(mutacaoPorPosicao(cromossomo, mapaCidades, taxaMutacao));
+			subpopulacaoCrossover.add(mutacaoPorPosicao(cromossomo, mapaCidades, taxaMutacao));
 		}
 		return subpopulacaoCrossover;
 	}
@@ -82,38 +82,32 @@ public class Mutacao {
 				if(aleatorio>posicaoAlelo){
 					for (int j=posicaoAlelo;j<aleatorio; j++){
 						valor2= seqAtualFilho.get(j+1);
+						seqNovaFilho.remove(j);
 						seqNovaFilho.add(j, valor2 );
 
 					}
+					seqNovaFilho.remove(aleatorio);
 					seqNovaFilho.add(aleatorio, valor);
 
 				}else if(aleatorio<i){
 
 					for (int j=i;j>aleatorio; j--){
 						valor2= seqAtualFilho.get(j-1);
+						seqNovaFilho.remove(j);
 						seqNovaFilho.add(j, valor2);
 					}
+					seqNovaFilho.remove(aleatorio);
 					seqNovaFilho.add(aleatorio, valor);
 
 				}else continue;
 
-
-
-				System.out.println("Sequencia antiga com aleatorio = "+ aleatorio + " alelo= "+ posicaoAlelo);
-
-				for(int m=0; m< seqAtualFilho.size();m++){
-					System.out.print(" "+ seqAtualFilho.get(m));
-				}
-				System.out.println("Sequencia nova : ");
-				for(int n=0; n< seqAtualFilho.size();n++){
-					System.out.print(" "+ seqNovaFilho.get(n));
-				}
+				filho.setGenotipo(seqNovaFilho);
+				filho.setFi(ProcessaCidades.calculaPercurso(mapaCidades, seqNovaFilho));
 			}
 
 
 		}
-		filho.setGenotipo(seqNovaFilho);
-		filho.setFi(ProcessaPopulacao.calculaPercurso(mapaCidades, seqNovaFilho));
+
 
 
 		return filho;
