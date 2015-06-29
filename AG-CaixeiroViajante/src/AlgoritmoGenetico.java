@@ -81,7 +81,7 @@ public class AlgoritmoGenetico {
 				System.out.print(vencedor.getGenotipo().get(i)+" ");
 			}
 			System.out.println();
-			System.out.println(vencedor.getFi());
+			System.out.println("fi: "+ vencedor.getFi() + " distancia: " + vencedor.getDistancia());
 			geracaoFinal.remove(vencedor);
 		}
 		System.out.println("FIM GA");
