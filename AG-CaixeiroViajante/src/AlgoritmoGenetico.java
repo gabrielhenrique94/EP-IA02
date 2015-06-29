@@ -24,16 +24,35 @@ public class AlgoritmoGenetico {
 	private HashMap<Integer, double[]> mapaCidades = new HashMap<Integer, double[]>();
 
 	/**
+	 * Taxa de mutacao
+	 */
+	private double taxaMutacao;
+
+	/**
+	 * Taxa de crossover
+	 */
+	private double taxaCrossover;
+
+	/**
+	 * operadores que podem ser aplicados
+	 */
+	private ArrayList<String> operadores;
+
+	/**
 	 * Construtor da classe
 	 * @param cromossomos
 	 * @param mapaCidades
 	 * @param geracoesMaximas
 	 */
-	public AlgoritmoGenetico(ArrayList<Cromossomo> cromossomos, HashMap<Integer, double[]> mapaCidades, int geracoesMaximas, int numIndividuos) {
+	public AlgoritmoGenetico(ArrayList<Cromossomo> cromossomos, HashMap<Integer, double[]> mapaCidades,
+			int geracoesMaximas, int numIndividuos, double taxaMutacao, double taxaCrossover, ArrayList<String> operadores) {
 		this.setPopulacao(cromossomos);
 		this.setMapaCidades(mapaCidades);
 		this.setGeracoesMaximas(geracoesMaximas);
 		this.setNumIndividuos(numIndividuos);
+		this.setTaxaCrossover(taxaCrossover);
+		this.setTaxaMutacao(taxaMutacao);
+		this.setOperadores(operadores);
 	}
 
 	/**
@@ -50,49 +69,22 @@ public class AlgoritmoGenetico {
 
 		while (!populacaoAdaptada && t < this.geracoesMaximas) {
 			System.out.println("Geraçao: " + t + " Populacao: " + geracaoFinal.size());
-			populacaoAdaptada = avaliarPopulacao(geracaoFinal);
+			geracaoFinal = selecionaNovaPopulacao(geracaoFinal, this.mapaCidades);
 
-			if (!populacaoAdaptada) {
-				geracaoFinal = selecionaNovaPopulacao(geracaoFinal, this.mapaCidades);
-			} else {
-				populacaoAdaptada = true;
-			}
 			t++;
 		}
-		Cromossomo vencedor = Selecao.melhorIndividuo(geracaoFinal);
-		System.out.println("Melhor Cromossomo");
-		for (int i = 0;i<vencedor.getGenotipo().size();i++) {
-			System.out.print(vencedor.getGenotipo().get(i)+" ");
-		}
-		System.out.println();
-		System.out.println(vencedor.getFi());
-		System.out.println("FIM GA");
-	}
 
-	private boolean avaliarPopulacao(ArrayList<Cromossomo> populacao) {
-		boolean populacaoAdaptada = false;
-		int igualdade = 5;
-		int countSemelhantes = 0;
-
-		for (int i = 0; i < populacao.size();i++) {
-			int achaConcorrente = 0;
-			while (countSemelhantes < igualdade && achaConcorrente < populacao.size()) {
-				int aleatorio = Helpers.intAleatorio(0, populacao.size() - 1);
-				Cromossomo concorrente = populacao.get(aleatorio);
-				if (populacao.get(i).compareTo(concorrente) == 1) {
-					countSemelhantes++;
-				}
-				achaConcorrente++;
-
+		for (int j = 1; j <= 3; j++) {
+			Cromossomo vencedor = Selecao.melhorIndividuo(geracaoFinal);
+			System.out.println("Melhor Cromossomo "+ j);
+			for (int i = 0;i<vencedor.getGenotipo().size();i++) {
+				System.out.print(vencedor.getGenotipo().get(i)+" ");
 			}
-			countSemelhantes = 0;
+			System.out.println();
+			System.out.println(vencedor.getFi());
+			geracaoFinal.remove(vencedor);
 		}
-
-		if(countSemelhantes >= igualdade) {
-			populacaoAdaptada = true;
-		}
-
-		return populacaoAdaptada;
+		System.out.println("FIM GA");
 	}
 
 	/**
@@ -121,18 +113,34 @@ public class AlgoritmoGenetico {
 
 		ArrayList<Cromossomo> novaPopulacao = new ArrayList<Cromossomo>();
 		novaPopulacao.addAll(populacao);
+		for (int i = 0; i < this.getOperadores().size(); i++) {
+			switch (this.getOperadores().get(i)) {
+			case "crossover":
+				ArrayList<Cromossomo> subpopulacaoCrossovers = Crossover.selecaoCrossover(populacao, mapaCidades, this.getTaxaCrossover());
+				novaPopulacao.addAll(subpopulacaoCrossovers);
+				break;
+			case "mutacao":
+				ArrayList<Cromossomo> subpopulacaoMutacoes = Mutacao.selecaoMutacao(populacao, mapaCidades, this.getTaxaMutacao());
+				novaPopulacao.addAll(subpopulacaoMutacoes);
+				break;
+			case "crosmut":
+				ArrayList<Cromossomo> crossover = Crossover.selecaoCrossover(populacao, mapaCidades, this.getTaxaCrossover());
+				ArrayList<Cromossomo> crosmut = Mutacao.selecaoMutacao(crossover, mapaCidades, this.getTaxaMutacao());
+				novaPopulacao.addAll(crosmut);
+				break;
+			case "selecao":
+				ArrayList<Cromossomo> subpopulacaoTorneio = Selecao.selecaoTorneio(populacao);
+				novaPopulacao.addAll(subpopulacaoTorneio);
+				break;
+			}
 
-		ArrayList<Cromossomo> subpopulacaoTorneio = Selecao.selecaoTorneio(populacao);
-		novaPopulacao.addAll(subpopulacaoTorneio);
-
-		ArrayList<Cromossomo> subpopulacaoCrossovers = Crossover.selecaoCrossover(populacao, mapaCidades);
-		novaPopulacao.addAll(subpopulacaoCrossovers);
-
-		ArrayList<Cromossomo> subpopulacaoMutacoes = Mutacao.selecaoMutacao(populacao, mapaCidades);
-		novaPopulacao.addAll(subpopulacaoMutacoes);
+		}
 
 		return novaPopulacao;
 	}
+
+
+	/*GETTERS E SETTERS*/
 
 	public ArrayList<Cromossomo> getPopulacao() {
 		return populacao;
@@ -164,5 +172,29 @@ public class AlgoritmoGenetico {
 
 	public void setNumIndividuos(int numIndividuos) {
 		this.numIndividuos = numIndividuos;
+	}
+
+	public double getTaxaMutacao() {
+		return taxaMutacao;
+	}
+
+	public void setTaxaMutacao(double taxaMutacao) {
+		this.taxaMutacao = taxaMutacao;
+	}
+
+	public double getTaxaCrossover() {
+		return taxaCrossover;
+	}
+
+	public void setTaxaCrossover(double taxaCrossover) {
+		this.taxaCrossover = taxaCrossover;
+	}
+
+	public ArrayList<String> getOperadores() {
+		return operadores;
+	}
+
+	public void setOperadores(ArrayList<String> operadores) {
+		this.operadores = operadores;
 	}
 }

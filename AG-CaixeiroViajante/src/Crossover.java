@@ -9,21 +9,16 @@ import java.util.Set;
 public class Crossover {
 
 	/**
-	 * Taxa utilizada para verificar se deve ser realizado crossover no cromossomo
-	 */
-	private static final double TAXA_CROSSOVER = 0.85;
-
-	/**
 	 * Cria uma subpopulacao de cromossomos por meio da aplicacao de crossover
 	 * @param populacao
 	 * @param mapaCidades
 	 * @return
 	 */
-	public static ArrayList<Cromossomo> selecaoCrossover (ArrayList<Cromossomo> populacao, HashMap<Integer, double[]> mapaCidades) {
+	public static ArrayList<Cromossomo> selecaoCrossover (ArrayList<Cromossomo> populacao, HashMap<Integer, double[]> mapaCidades, double taxaCrossover) {
 		ArrayList<Cromossomo> subpopulacaoCrossover = new ArrayList<Cromossomo>();
 		// Sorteia pelo menos o numero de vezes para todos os elementos terem chance de ser sorteados
 		for (int i = 0; i < populacao.size(); i++) {
-			if (Math.random() <= TAXA_CROSSOVER) {
+			if (Math.random() <= taxaCrossover) {
 				int pai1 = -1; // com ESSA SELECAO ALTERAR ESSES PAIS
 				int pai2 = -1;
 
@@ -36,11 +31,11 @@ public class Crossover {
 				Cromossomo cpai1 = populacao.get(pai1);
 				Cromossomo cpai2 = populacao.get(pai2);
 
-				/* Filhos 1 e 2 gerados */
-				//ArrayList<Cromossomo> filhos = Crossover.crossoverOX(cpai1, cpai2, mapaCidades);
-				//ArrayList<Cromossomo> filhos = Crossover.crossoverPosicao(cpai1, cpai2, mapaCidades);
-				ArrayList<Cromossomo> filhos = Crossover.crossoverBasOrdem(cpai1, cpai2, mapaCidades);
-				subpopulacaoCrossover.addAll(filhos);
+				/* Filhos de todos crossovers */
+				subpopulacaoCrossover.addAll(Crossover.crossoverOX(cpai1, cpai2, mapaCidades));
+				subpopulacaoCrossover.addAll(Crossover.crossoverPosicao(cpai1, cpai2, mapaCidades));
+				//subpopulacaoCrossover.addAll(Crossover.crossoverBasOrdem(cpai1, cpai2, mapaCidades));
+
 			}
 		}
 
@@ -199,8 +194,7 @@ public class Crossover {
 	 * @param mapaCidades
 	 * @return
 	 */
-	public static ArrayList<Cromossomo> crossoverPosicao(Cromossomo pai1,
-			Cromossomo pai2, HashMap<Integer, double[]> mapaCidades) {
+	public static ArrayList<Cromossomo> crossoverPosicao(Cromossomo pai1, Cromossomo pai2, HashMap<Integer, double[]> mapaCidades) {
 
 		ArrayList<Cromossomo> filhos = new ArrayList<Cromossomo>();
 		ArrayList<Integer> genotipoPai1 = pai1.getGenotipo();

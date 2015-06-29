@@ -4,24 +4,19 @@ import java.util.HashMap;
 public class Mutacao {
 
 	/**
-	 * Taxa utilizada para verificar se deve ser realizado mutacao no alelo
-	 */
-	private static final double TAXA_MUTACAO = 0.1;
-
-	/**
 	 * Cria uma subpopulacao de elementos mutados
 	 * @param populacao
 	 * @param mapaCidades
 	 * @return
 	 */
-	public static ArrayList<Cromossomo> selecaoMutacao(ArrayList<Cromossomo> populacao, HashMap<Integer, double[]> mapaCidades) {
+	public static ArrayList<Cromossomo> selecaoMutacao(ArrayList<Cromossomo> populacao, HashMap<Integer, double[]> mapaCidades, double taxaMutacao) {
 		ArrayList<Cromossomo> subpopulacaoCrossover = new ArrayList<Cromossomo>();
 
 		// Faz mutacao, ou pelo menos tenta fazer, em todos os cromossomos da populacao, criando uma populacao do mesmo tamanho da original
 		for (int i = 0; i < populacao.size(); i++) {
 			Cromossomo cromossomo = populacao.get(i);
-			subpopulacaoCrossover.add(mutacaoInversiva(cromossomo, mapaCidades));
-			//subpopulacaoCrossover.add(mutacaoPorPosicao(cromossomo, mapaCidades));
+			subpopulacaoCrossover.add(mutacaoInversiva(cromossomo, mapaCidades, taxaMutacao));
+			//subpopulacaoCrossover.add(mutacaoPorPosicao(cromossomo, mapaCidades, taxaMutacao));
 		}
 		return subpopulacaoCrossover;
 	}
@@ -33,12 +28,12 @@ public class Mutacao {
 	 * @param mapaCidades
 	 * @return
 	 */
-	public static Cromossomo mutacaoInversiva(Cromossomo filho, HashMap<Integer, double[]> mapaCidades) {
+	public static Cromossomo mutacaoInversiva(Cromossomo filho, HashMap<Integer, double[]> mapaCidades, double taxaMutacao) {
 		ArrayList<Integer> genotipo = filho.getGenotipo();
 
 		/*Fazer teste de mutacao para pelo menos o numero de alelos no cromossomo*/
 		for (int i = 0; i < genotipo.size(); i++) {
-			if (Math.random() <= TAXA_MUTACAO) {
+			if (Math.random() <= taxaMutacao) {
 				int aleatorio1 = -1;
 				int aleatorio2 = -1;
 
@@ -69,7 +64,7 @@ public class Mutacao {
 		return filho;
 	}
 
-	public static Cromossomo mutacaoPorPosicao(Cromossomo filho, HashMap<Integer, double[]> mapaCidades) {
+	public static Cromossomo mutacaoPorPosicao(Cromossomo filho, HashMap<Integer, double[]> mapaCidades, double taxaMutacao) {
 		ArrayList<Integer> seqAtualFilho = filho.getGenotipo();
 		ArrayList<Integer> seqNovaFilho = seqAtualFilho;
 		int posicaoAlelo=-1;
@@ -77,7 +72,7 @@ public class Mutacao {
 		int valor = -1;
 
 		for (int i = 0; i < seqAtualFilho.size(); i++) {
-			if (Math.random() <= TAXA_MUTACAO) {
+			if (Math.random() <= taxaMutacao) {
 				posicaoAlelo = i;
 
 				aleatorio = Helpers.intAleatorio(0, seqAtualFilho.size()-1);
