@@ -15,7 +15,7 @@ public class Mutacao {
 		// Faz mutacao, ou pelo menos tenta fazer, em todos os cromossomos da populacao, criando uma populacao do mesmo tamanho da original
 		for (int i = 0; i < populacao.size(); i++) {
 			Cromossomo cromossomo = populacao.get(i);
-			subpopulacaoCrossover.add(mutacaoInversiva(cromossomo, mapaCidades, taxaMutacao));
+			//subpopulacaoCrossover.add(mutacaoInversiva(cromossomo, mapaCidades, taxaMutacao));
 			subpopulacaoCrossover.add(mutacaoPorPosicao(cromossomo, mapaCidades, taxaMutacao));
 		}
 		return subpopulacaoCrossover;
@@ -102,12 +102,17 @@ public class Mutacao {
 				}else continue;
 
 				filho.setGenotipo(seqNovaFilho);
-				filho.setFi(ProcessaPopulacao.calculaPercurso(mapaCidades, seqNovaFilho));
+				filho.setFi(ProcessaCidades.calculaPercurso(mapaCidades, seqNovaFilho));
 			}
 
 
 		}
+<<<<<<< HEAD
+		filho.setGenotipo(seqNovaFilho);
+		filho.setFi(ProcessaPopulacao.calculaPercurso(mapaCidades, seqNovaFilho));
+=======
 
+>>>>>>> 54bd987ad0be30214d0228681a0ef2c6ab182b5c
 
 
 		return filho;
