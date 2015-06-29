@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 public class Crossover {
@@ -221,50 +222,57 @@ public class Crossover {
 			mapaCidadesFilho2.put(i, false);
 		}
 
+		Random gerador = new Random();
+
+		Set<Integer> posicoesPais = new LinkedHashSet<Integer>();
+
+		//Define quais posicoes serao pegas dos pais
+		for(int i = 0; i < 50; i++){
+			boolean inseriu = posicoesPais.add(gerador.nextInt(100));
+			if (inseriu == false) i--;
+		}
+
+		Set<Integer> posicoesPaisSecundario = new LinkedHashSet<Integer>();
+		Iterator<Integer> IteratorPaisSecundario = posicoesPaisSecundario.iterator();
+		Iterator<Integer> IteratorPosPais = posicoesPais.iterator();
+
 		//Gerando Filho 1
 
 		//Cria um Set para nao permitir que a mesma cidade seja inserida duas vezes
 		Set<Integer> HFilho1 = new LinkedHashSet<Integer>();
 
-		ArrayList<Integer> posicoesPai1F1 = new ArrayList<Integer>();
-		ArrayList<Integer> posicoesPai2F1 = new ArrayList<Integer>();
-
-		//Pega as posicoes do pai 2
-		for(int posicao = 3; posicao < genotipoPai2.size(); posicao = posicao+3){
-			HFilho1.add(genotipoPai2.get(posicao));
-			posicoesPai2F1.add(posicao);
+		//Adiciona valores do pai 2 nas posicoes selecionadas no auxiliar do Filho 1
+		while(IteratorPosPais.hasNext()){
+			HFilho1.add(genotipoPai2.get(IteratorPosPais.next()));
 		}
 
 		//Pega as posicoes do pai 1
 		for(int contador = 0; contador < genotipoPai1.size(); contador++){
 			boolean a = HFilho1.add(genotipoPai1.get(contador));
-			if (a) posicoesPai1F1.add(contador);
+			if (a) posicoesPaisSecundario.add(contador);
 		}
 
 		//Preenchendo vetor
-		Iterator<Integer> It = HFilho1.iterator();
-		while(It.hasNext())	{
-			int aux = 0;
-			Integer valor = 0;
+		Iterator<Integer> IteratorFilho1 = HFilho1.iterator();
+		IteratorPosPais = posicoesPais.iterator();
+		IteratorPaisSecundario = posicoesPaisSecundario.iterator();
+		while(IteratorFilho1.hasNext())	{
 			//Adicionando cidades adivindas do pai2
-			for(int contador = 0; contador < posicoesPai2F1.size(); contador++){
-				valor = It.next();
-				aux = posicoesPai2F1.get(contador);
-				genotipoFilho1[aux] = valor;
-				mapaCidadesFilho1.put(genotipoPai2.get(aux), true);
+			while(IteratorPosPais.hasNext()){
+				int aux = IteratorPosPais.next();
+				genotipoFilho1[aux] = IteratorFilho1.next();
+				mapaCidadesFilho1.put(aux, true);
 			}
-			valor = 0;
 			//Adicionando cidades adivindas do pai1
-			for(int contador = 0, contaux= 0; contador < genotipoFilho1.length; contaux++, contador++){
-				if (contador!=0 && contador%3 == 0){
+			int contador = 0;
+			while(IteratorPaisSecundario.hasNext()){
+				while(posicoesPais.contains(contador)){
 					contador++;
 				}
-				if(It.hasNext()){
-					valor = It.next();
-					aux = posicoesPai1F1.get(contaux);
-					genotipoFilho1[contador] = valor;
-					mapaCidadesFilho1.put(genotipoPai1.get(aux), true);
-				}
+				int aux = IteratorPaisSecundario.next();
+				genotipoFilho1[contador] = IteratorFilho1.next();
+				mapaCidadesFilho1.put(genotipoPai1.get(aux), true);
+				contador++;
 			}
 		}
 
@@ -273,45 +281,39 @@ public class Crossover {
 		//Cria um Set para nao permitir que a mesma cidade seja inserida duas vezes
 		Set<Integer> HFilho2 = new LinkedHashSet<Integer>();
 
-		ArrayList<Integer> posicoesPai1F2 = new ArrayList<Integer>();
-		ArrayList<Integer> posicoesPai2F2 = new ArrayList<Integer>();
-
 		//Pega as posicoes do pai 1
-		for(int posicao = 3; posicao < genotipoPai1.size(); posicao = posicao+3){
-			HFilho1.add(genotipoPai1.get(posicao));
-			posicoesPai1F2.add(posicao);
+		for(int posicao = 0; posicao < genotipoPai2.size(); posicao = posicao+3){
+			while(IteratorPosPais.hasNext())	{
+				HFilho2.add(genotipoPai1.get(IteratorPosPais.next()));
+			}
 		}
 
 		//Pega as posicoes do pai 2
 		for(int contador = 0; contador < genotipoPai2.size(); contador++){
-			boolean a = HFilho2.add(genotipoPai2.get(contador));
-			if (a) posicoesPai2F2.add(contador);
+			HFilho2.add(genotipoPai2.get(contador));
 		}
 
 		//Preenchendo vetor
-		Iterator<Integer> IteratorF2 = HFilho2.iterator();
-		while(IteratorF2.hasNext())	{
-			int aux = 0;
-			Integer valor = 0;
+		Iterator<Integer> IteratorFilho2 = HFilho2.iterator();
+		IteratorPosPais = posicoesPais.iterator();
+		IteratorPaisSecundario = posicoesPaisSecundario.iterator();
+		while(IteratorFilho2.hasNext())	{
 			//Adicionando cidades adivindas do pai1
-			for(int contador = 0; contador < posicoesPai1F2.size(); contador++){
-				valor = IteratorF2.next();
-				aux = posicoesPai1F2.get(contador);
-				genotipoFilho2[aux] = valor;
-				mapaCidadesFilho2.put(genotipoPai1.get(aux), true);
+			while(IteratorPosPais.hasNext()){
+				int aux = IteratorPosPais.next();
+				genotipoFilho2[aux] = IteratorFilho2.next();
+				mapaCidadesFilho2.put(aux, true);
 			}
-			valor = 0;
 			//Adicionando cidades adivindas do pai2
-			for(int contador = 0, contaux= 0; contador < genotipoFilho2.length; contaux++, contador++){
-				if (contador!=0 && contador%3 == 0){
+			int contador = 0;
+			while(IteratorPaisSecundario.hasNext()){
+				while(posicoesPais.contains(contador)){
 					contador++;
 				}
-				if(IteratorF2.hasNext()){
-					valor = IteratorF2.next();
-					aux = posicoesPai2F2.get(contaux);
-					genotipoFilho2[contador] = valor;
-					mapaCidadesFilho2.put(genotipoPai2.get(aux), true);
-				}
+				int aux = IteratorPaisSecundario.next();
+				genotipoFilho2[contador] = IteratorFilho2.next();
+				mapaCidadesFilho2.put(genotipoPai2.get(aux), true);
+				contador++;
 			}
 		}
 
