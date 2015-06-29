@@ -75,8 +75,6 @@ public class Crossover {
 			pf = Helpers.intAleatorio(0, genes - 1);
 		}
 
-
-
 		/* Copiando dados fixos */
 
 		int auxFixo = pf;
@@ -192,9 +190,9 @@ public class Crossover {
 
 	}
 
-
 	/**
 	 * Metodo order crossover (Posicao)
+	 *
 	 * @param pai1
 	 * @param pai2
 	 * @param mapaCidades
@@ -282,10 +280,8 @@ public class Crossover {
 		Set<Integer> HFilho2 = new LinkedHashSet<Integer>();
 
 		//Pega as posicoes do pai 1
-		for(int posicao = 0; posicao < genotipoPai2.size(); posicao = posicao+3){
-			while(IteratorPosPais.hasNext())	{
-				HFilho2.add(genotipoPai1.get(IteratorPosPais.next()));
-			}
+		while(IteratorPosPais.hasNext()){
+			HFilho2.add(genotipoPai1.get(IteratorPosPais.next()));
 		}
 
 		//Pega as posicoes do pai 2
