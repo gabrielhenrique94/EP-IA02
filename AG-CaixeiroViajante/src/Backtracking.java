@@ -54,7 +54,7 @@ public class Backtracking {
 
 			/*cria cromossomo para cada combinacao de cidade criada*/
 			for (int i = 0; i < combinacoesCidades.size(); i++) {
-				Cromossomo novo = new Cromossomo(combinacoesCidades.get(i), ProcessaCidades.calculaPercurso(mapaCidades, combinacoesCidades.get(i)));
+				Cromossomo novo = new Cromossomo(combinacoesCidades.get(i), ProcessaPopulacao.calculaPercurso(mapaCidades, combinacoesCidades.get(i)));
 				for (int j=0;j<novo.getGenotipo().size();j++) {
 					bw.write(novo.getGenotipo().get(j) + ";");
 

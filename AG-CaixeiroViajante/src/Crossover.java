@@ -175,9 +175,9 @@ public class Crossover {
 		}
 
 		Cromossomo filho1 = new Cromossomo(seqFilho1,
-				ProcessaCidades.calculaPercurso(mapaCidades, seqFilho1));
+				ProcessaPopulacao.calculaPercurso(mapaCidades, seqFilho1));
 		Cromossomo filho2 = new Cromossomo(seqFilho2,
-				ProcessaCidades.calculaPercurso(mapaCidades, seqFilho2));
+				ProcessaPopulacao.calculaPercurso(mapaCidades, seqFilho2));
 
 		filhos.add(filho1);
 		filhos.add(filho2);
@@ -318,9 +318,9 @@ public class Crossover {
 		}
 
 		Cromossomo filho1 = new Cromossomo(seqFilho1,
-				ProcessaCidades.calculaPercurso(mapaCidades, seqFilho1));
+				ProcessaPopulacao.calculaPercurso(mapaCidades, seqFilho1));
 		Cromossomo filho2 = new Cromossomo(seqFilho2,
-				ProcessaCidades.calculaPercurso(mapaCidades, seqFilho2));
+				ProcessaPopulacao.calculaPercurso(mapaCidades, seqFilho2));
 
 		filhos.add(filho1);
 		filhos.add(filho2);
@@ -461,9 +461,9 @@ public class Crossover {
 		}
 
 		Cromossomo filho1 = new Cromossomo(seqFilho1,
-				ProcessaCidades.calculaPercurso(mapaCidades, seqFilho1));
+				ProcessaPopulacao.calculaPercurso(mapaCidades, seqFilho1));
 		Cromossomo filho2 = new Cromossomo(seqFilho2,
-				ProcessaCidades.calculaPercurso(mapaCidades, seqFilho2));
+				ProcessaPopulacao.calculaPercurso(mapaCidades, seqFilho2));
 
 		filhos.add(filho1);
 		filhos.add(filho2);

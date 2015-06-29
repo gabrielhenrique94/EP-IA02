@@ -5,8 +5,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class ProcessaCidades {
+public class ProcessaPopulacao {
 
+	/**
+	 * Le o arquivo que contem as cidades com suas coordenadas e gera um mapa contendo essa informacao,
+	 * na forma nomeCidade: [x,y]
+	 * @param arquivo
+	 * @return
+	 */
 	public static HashMap<Integer, double[]> lerArquivoCidades(String arquivo) {
 		HashMap<Integer, double[]> mapaCidades = new HashMap<Integer, double[]>();
 

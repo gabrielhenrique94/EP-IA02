@@ -59,7 +59,7 @@ public class Mutacao {
 
 
 		filho.setGenotipo(genotipo);
-		filho.setFi(ProcessaCidades.calculaPercurso(mapaCidades, genotipo));
+		filho.setFi(ProcessaPopulacao.calculaPercurso(mapaCidades, genotipo));
 
 		return filho;
 	}
@@ -113,7 +113,7 @@ public class Mutacao {
 
 		}
 		filho.setGenotipo(seqNovaFilho);
-		filho.setFi(ProcessaCidades.calculaPercurso(mapaCidades, seqNovaFilho));
+		filho.setFi(ProcessaPopulacao.calculaPercurso(mapaCidades, seqNovaFilho));
 
 
 		return filho;

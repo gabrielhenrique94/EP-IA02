@@ -65,9 +65,8 @@ public class AlgoritmoGenetico {
 		int t = 0;
 		System.out.println("Gerações: " + geracoesMaximas);
 		ArrayList<Cromossomo> geracaoFinal = selecionaNovaPopulacao(this.getPopulacao(), this.mapaCidades);
-		boolean populacaoAdaptada = false;
 
-		while (!populacaoAdaptada && t < this.geracoesMaximas) {
+		while (t < this.geracoesMaximas) {
 			System.out.println("Geraçao: " + t + " Populacao: " + geracaoFinal.size());
 			geracaoFinal = selecionaNovaPopulacao(geracaoFinal, this.mapaCidades);
 
