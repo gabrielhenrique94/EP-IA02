@@ -35,11 +35,8 @@ public class Main {
 			case "crosmut":
 				operadoresValidos.add("crosmut");
 				break;
-			case "selecao":
-				operadoresValidos.add("selecao");
-				break;
 			default:
-				System.out.println("Você colocou um operador invalido. Os operadores permitidos são: crossover-mutacao-crosmut-selecao");
+				System.out.println("Você colocou um operador invalido. Os operadores permitidos são: crossover-mutacao-crosmut");
 				break;
 			}
 		}

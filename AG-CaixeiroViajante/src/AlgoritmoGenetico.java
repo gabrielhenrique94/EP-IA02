@@ -127,15 +127,13 @@ public class AlgoritmoGenetico {
 				ArrayList<Cromossomo> crosmut = Mutacao.selecaoMutacao(crossover, mapaCidades, this.getTaxaMutacao());
 				novaPopulacao.addAll(crosmut);
 				break;
-			case "selecao":
-				ArrayList<Cromossomo> subpopulacaoTorneio = Selecao.selecaoTorneio(populacao);
-				novaPopulacao.addAll(subpopulacaoTorneio);
-				break;
 			}
 
 		}
 
-		return novaPopulacao;
+		ArrayList<Cromossomo> subpopulacaoTorneio = Selecao.selecaoTorneio(novaPopulacao);
+
+		return subpopulacaoTorneio;
 	}
 
 

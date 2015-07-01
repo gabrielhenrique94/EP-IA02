@@ -14,7 +14,6 @@ para sua execução devem ser passado os seguintes argumento na ordem em que apa
 	crossover - para criar subpopulação so com crossover
 	mutacao - para criar subpopulação so com mutação
 	crosmut - para criar subpopulação com crossover e mutação integrados
-	selecao - para criar subpopulação com algoritmo de seleção de torneio
 	
-	ex de passagem de argumentos: 100 50 0.1 0.85 crossover-mutacao-crosmut-selecao ou 200 150 0.15 0.90 crossover-mutacao-selecao
+	ex de passagem de argumentos: 100 50 0.1 0.85 crossover-mutacao-crosmut ou 200 150 0.15 0.90 crossover-mutacao
 
