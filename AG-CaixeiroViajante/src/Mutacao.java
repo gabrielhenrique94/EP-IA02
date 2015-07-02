@@ -16,7 +16,7 @@ public class Mutacao {
 		for (int i = 0; i < populacao.size(); i++) {
 			Cromossomo cromossomo = populacao.get(i);
 			subpopulacaoCrossover.add(mutacaoInversiva(cromossomo, mapaCidades, taxaMutacao));
-			subpopulacaoCrossover.add(mutacaoPorPosicao(cromossomo, mapaCidades, taxaMutacao));
+			//subpopulacaoCrossover.add(mutacaoPorPosicao(cromossomo, mapaCidades, taxaMutacao));
 		}
 		return subpopulacaoCrossover;
 	}

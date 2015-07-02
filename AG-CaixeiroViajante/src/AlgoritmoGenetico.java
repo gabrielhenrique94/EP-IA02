@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -62,28 +65,48 @@ public class AlgoritmoGenetico {
 	 * @param mapaCidades Lugar que se encontra cada cidade que compoe as distancias nos cromossomos da populacao em um mapa.
 	 */
 	public void iniciaAlgoritmoGenetico() {
-		int t = 0;
-		System.out.println("Gerações: " + geracoesMaximas);
-		ArrayList<Cromossomo> geracaoFinal = selecionaNovaPopulacao(this.getPopulacao(), this.mapaCidades);
 
-		while (t < this.geracoesMaximas) {
-			System.out.println("Geraçao: " + t + " Populacao: " + geracaoFinal.size());
-			geracaoFinal = selecionaNovaPopulacao(geracaoFinal, this.mapaCidades);
+		try {
+			String nomeArq = "src/arquivos/evolucao_g" + geracoesMaximas+"_pop"+ this.getPopulacao().size()+"_op"+ this.getOperadores().size() +".csv";
+			File file = new File(nomeArq);
 
-			t++;
-		}
-
-		for (int j = 1; j <= 3; j++) {
-			Cromossomo vencedor = Selecao.melhorIndividuo(geracaoFinal);
-			System.out.println("Melhor Cromossomo "+ j);
-			for (int i = 0;i<vencedor.getGenotipo().size();i++) {
-				System.out.print(vencedor.getGenotipo().get(i)+" ");
+			// if file doesnt exists, then create it
+			if (!file.exists()) {
+				file.createNewFile();
 			}
-			System.out.println();
-			System.out.println("fi: "+ vencedor.getFi() + " distancia: " + vencedor.getDistancia());
-			geracaoFinal.remove(vencedor);
+
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write("fi;distancia\n");
+			int t = 0;
+			System.out.println("Gerações: " + geracoesMaximas);
+			ArrayList<Cromossomo> geracaoFinal = selecionaNovaPopulacao(this.getPopulacao(), this.mapaCidades);
+
+			while (t < this.geracoesMaximas) {
+				System.out.println("Geraçao: " + t + " Populacao: " + geracaoFinal.size());
+				geracaoFinal = selecionaNovaPopulacao(geracaoFinal, this.mapaCidades);
+				Cromossomo vencedor = Selecao.melhorIndividuo(geracaoFinal);
+				bw.write(vencedor.getFi() + ";" + vencedor.getDistancia() + ";");
+				bw.write("\n");
+
+				t++;
+			}
+
+			for (int j = 1; j <= 3; j++) {
+				Cromossomo vencedor = Selecao.melhorIndividuo(geracaoFinal);
+				System.out.println("Melhor Cromossomo "+ j);
+				for (int i = 0;i<vencedor.getGenotipo().size();i++) {
+					System.out.print(vencedor.getGenotipo().get(i)+" ");
+				}
+				System.out.println();
+				System.out.println("fi: "+ vencedor.getFi() + " distancia: " + vencedor.getDistancia());
+				geracaoFinal.remove(vencedor);
+			}
+			System.out.println("FIM GA");
+			bw.close();
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
-		System.out.println("FIM GA");
 	}
 
 	/**

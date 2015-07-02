@@ -34,8 +34,8 @@ public class Crossover {
 
 				/* Filhos de todos crossovers */
 				subpopulacaoCrossover.addAll(Crossover.crossoverOX(cpai1, cpai2, mapaCidades));
-				subpopulacaoCrossover.addAll(Crossover.crossoverPBX(cpai1, cpai2, mapaCidades));
-				subpopulacaoCrossover.addAll(Crossover.crossoverOBX(cpai1, cpai2, mapaCidades));
+				//subpopulacaoCrossover.addAll(Crossover.crossoverPBX(cpai1, cpai2, mapaCidades));
+				//subpopulacaoCrossover.addAll(Crossover.crossoverOBX(cpai1, cpai2, mapaCidades));
 
 			}
 		}
@@ -364,7 +364,7 @@ public class Crossover {
 		//Gerando Filho 1 - Filho 1 tera pai 2 como a ordem das selecionadas de um pai
 
 		//passo1:
-		//pegou quais são as posições aleatórias do pai1 e inseriu em PosicaoPaiPrincipal
+		//pegou quais sï¿½o as posiï¿½ï¿½es aleatï¿½rias do pai1 e inseriu em PosicaoPaiPrincipal
 		//Define quais posicoes sera pega do pai1
 		Set<Integer> PosicaoSortPaiPrincipal = new LinkedHashSet<Integer>();
 		for(int i = 0; i < 50; i++){
@@ -373,7 +373,7 @@ public class Crossover {
 		}
 
 		//passo 2:
-		//verificar quais são as cidades q ocupam essa posição em pai2
+		//verificar quais sï¿½o as cidades q ocupam essa posiï¿½ï¿½o em pai2
 		Iterator<Integer> IteratorSortPaiPrincipal= PosicaoSortPaiPrincipal.iterator();
 		Set<Integer> Auxiliar = new LinkedHashSet<Integer>();
 		while(IteratorSortPaiPrincipal.hasNext()){
@@ -381,7 +381,7 @@ public class Crossover {
 		}
 
 		//passo 3:
-		//verificar em que posição essas cidades vindas do pai2 estariam em pai1
+		//verificar em que posiï¿½ï¿½o essas cidades vindas do pai2 estariam em pai1
 		//Cria um Set do pai 1
 		Set<Integer> PosicaoPaiPrincipal = new LinkedHashSet<Integer>();
 		Set<Integer> Auxiliar2 = new LinkedHashSet<Integer>();
@@ -394,7 +394,7 @@ public class Crossover {
 		Iterator<Integer> IteratorPosicaoPaiPrincipal = PosicaoPaiPrincipal.iterator();
 		Set<Integer> auxiliar3 = new LinkedHashSet<Integer>();
 		auxiliar3.addAll(Auxiliar2);
-		//para cada item em Auxiliar eu vou verificar a existencia dele em Auxiliar2... faço um contador... onde o contador para é onde aquele item ta
+		//para cada item em Auxiliar eu vou verificar a existencia dele em Auxiliar2... faï¿½o um contador... onde o contador para ï¿½ onde aquele item ta
 		while(IteratorAuxiliar.hasNext() && IteratorPosicaoPaiPrincipal.hasNext()){
 			Iterator<Integer> IteratorAuxiliar2 = Auxiliar2.iterator();
 			int aux = IteratorAuxiliar.next();
@@ -459,7 +459,7 @@ public class Crossover {
 		//passo1: - igual ao do gerando Filho1
 
 		//passo 2:
-		//verificar quais são as cidades q ocupam essa posição em pai1
+		//verificar quais sï¿½o as cidades q ocupam essa posiï¿½ï¿½o em pai1
 		IteratorSortPaiPrincipal= PosicaoSortPaiPrincipal.iterator();
 		Auxiliar = new LinkedHashSet<Integer>();
 		while(IteratorSortPaiPrincipal.hasNext()){
@@ -467,7 +467,7 @@ public class Crossover {
 		}
 
 		//passo 3:
-		//verificar em que posição essas cidades vindas do pai1 estariam em pai2
+		//verificar em que posiï¿½ï¿½o essas cidades vindas do pai1 estariam em pai2
 		//Cria um Set do pai 1
 		PosicaoPaiPrincipal = new LinkedHashSet<Integer>();
 		Auxiliar2 = new LinkedHashSet<Integer>();
@@ -480,7 +480,7 @@ public class Crossover {
 		IteratorPosicaoPaiPrincipal = PosicaoPaiPrincipal.iterator();
 		auxiliar3 = new LinkedHashSet<Integer>();
 		auxiliar3.addAll(Auxiliar2);
-		//para cada item em Auxiliar eu vou verificar a existencia dele em Auxiliar2... faço um contador... onde o contador para é onde aquele item ta
+		//para cada item em Auxiliar eu vou verificar a existencia dele em Auxiliar2... faï¿½o um contador... onde o contador para ï¿½ onde aquele item ta
 		while(IteratorAuxiliar.hasNext() && IteratorPosicaoPaiPrincipal.hasNext()){
 			IteratorAuxiliar2 = Auxiliar2.iterator();
 			int aux = IteratorAuxiliar.next();
