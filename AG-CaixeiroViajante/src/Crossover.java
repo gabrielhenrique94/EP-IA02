@@ -33,8 +33,8 @@ public class Crossover {
 				Cromossomo cpai2 = populacao.get(pai2);
 
 				/* Filhos de todos crossovers */
-				//subpopulacaoCrossover.addAll(Crossover.crossoverOX(cpai1, cpai2, mapaCidades));
-				//subpopulacaoCrossover.addAll(Crossover.crossoverPBX(cpai1, cpai2, mapaCidades));
+				subpopulacaoCrossover.addAll(Crossover.crossoverOX(cpai1, cpai2, mapaCidades));
+				subpopulacaoCrossover.addAll(Crossover.crossoverPBX(cpai1, cpai2, mapaCidades));
 				subpopulacaoCrossover.addAll(Crossover.crossoverOBX(cpai1, cpai2, mapaCidades));
 
 			}
@@ -457,6 +457,88 @@ public class Crossover {
 		//Gerando Filho 2 - Filho 2 tera pai 1 como a ordem das selecionadas de um pai
 
 		//passo1: - igual ao do gerando Filho1
+
+		//passo 2:
+		//verificar quais são as cidades q ocupam essa posição em pai1
+		IteratorSortPaiPrincipal= PosicaoSortPaiPrincipal.iterator();
+		Auxiliar = new LinkedHashSet<Integer>();
+		while(IteratorSortPaiPrincipal.hasNext()){
+			Auxiliar.add(genotipoPai1.get(IteratorSortPaiPrincipal.next()));
+		}
+
+		//passo 3:
+		//verificar em que posição essas cidades vindas do pai1 estariam em pai2
+		//Cria um Set do pai 1
+		PosicaoPaiPrincipal = new LinkedHashSet<Integer>();
+		Auxiliar2 = new LinkedHashSet<Integer>();
+		for(int contador = 0; contador < genotipoPai2.size(); contador++){
+			boolean inseriu = Auxiliar2.add(genotipoPai2.get(contador));
+			if (inseriu) PosicaoPaiPrincipal.add(contador);
+		}
+		auxiliarPosicao = new LinkedHashSet<Integer>();
+		IteratorAuxiliar = Auxiliar.iterator();
+		IteratorPosicaoPaiPrincipal = PosicaoPaiPrincipal.iterator();
+		auxiliar3 = new LinkedHashSet<Integer>();
+		auxiliar3.addAll(Auxiliar2);
+		//para cada item em Auxiliar eu vou verificar a existencia dele em Auxiliar2... faço um contador... onde o contador para é onde aquele item ta
+		while(IteratorAuxiliar.hasNext() && IteratorPosicaoPaiPrincipal.hasNext()){
+			IteratorAuxiliar2 = Auxiliar2.iterator();
+			int aux = IteratorAuxiliar.next();
+			int contador = 0;
+			while(IteratorAuxiliar2.hasNext()){
+				int aux2 = IteratorAuxiliar2.next();
+				if (aux == aux2){
+					auxiliarPosicao.add(contador);
+					auxiliar3.remove(aux2);
+					break;
+				}
+				contador++;
+			}
+		}
+
+		//passo 4:
+		//ordenar cidades nas posicoes definidas no passo3
+		AuxiliarFilho1 = new TreeSet<Integer>();
+		IteratorAuxiliar = Auxiliar.iterator();
+		while(IteratorAuxiliar.hasNext()){
+			AuxiliarFilho1.add(IteratorAuxiliar.next());
+		}
+
+		AuxiliarPosicaoOrdenado = new TreeSet<Integer>();
+		AuxiliarPosicaoOrdenado.addAll(auxiliarPosicao);
+
+		//passo 5:
+		//preencher restante com cidades do pai2
+		IteratorAuxiliarFilho1 = AuxiliarFilho1.iterator();
+		IteratorAuxiliarPosicaoOrdenado = AuxiliarPosicaoOrdenado.iterator();
+		AuxiliarInsercao = new LinkedHashSet<Integer>();
+		//Adicionando cidades ordenadas
+		while(IteratorAuxiliarFilho1.hasNext()){
+			int aux = IteratorAuxiliarPosicaoOrdenado.next();
+			genotipoFilho2[aux] = IteratorAuxiliarFilho1.next();
+			mapaCidadesFilho2.put(genotipoPai2.get(aux), true);
+			AuxiliarInsercao.add(genotipoFilho2[aux]);
+		}
+		//Adicionando cidades adivindas do pai2
+		IteratorPosicaoPaiPrincipal = PosicaoPaiPrincipal.iterator();
+		IteratorAuxiliar2 = Auxiliar2.iterator();
+		while(IteratorAuxiliar2.hasNext()){
+			AuxiliarInsercao.add(IteratorAuxiliar2.next());
+		}
+		IteratorAuxiliarInsercao = AuxiliarInsercao.iterator();
+		for(int i = 0; i < 50; i++){
+			IteratorAuxiliarInsercao.next();
+		}
+		for(int contador = 0; contador <= genotipoFilho1.length; contador++){
+			while(IteratorAuxiliarInsercao.hasNext()){
+				if(genotipoFilho2[contador] == 0){
+					int aux = IteratorPosicaoPaiPrincipal.next();
+					genotipoFilho2[contador] = IteratorAuxiliarInsercao.next();
+					mapaCidadesFilho2.put(genotipoPai2.get(aux), true);
+				}
+				contador++;
+			}
+		}
 
 		// Gerando o cromossomo dos filhos
 		ArrayList<Integer> seqFilho1 = new ArrayList<Integer>();
