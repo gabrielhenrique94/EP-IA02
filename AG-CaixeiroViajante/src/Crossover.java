@@ -34,8 +34,8 @@ public class Crossover {
 
 				/* Filhos de todos crossovers */
 				subpopulacaoCrossover.addAll(Crossover.crossoverOX(cpai1, cpai2, mapaCidades));
-				//subpopulacaoCrossover.addAll(Crossover.crossoverPBX(cpai1, cpai2, mapaCidades));
-				//subpopulacaoCrossover.addAll(Crossover.crossoverOBX(cpai1, cpai2, mapaCidades));
+				subpopulacaoCrossover.addAll(Crossover.crossoverPBX(cpai1, cpai2, mapaCidades));
+				subpopulacaoCrossover.addAll(Crossover.crossoverOBX(cpai1, cpai2, mapaCidades));
 
 			}
 		}
