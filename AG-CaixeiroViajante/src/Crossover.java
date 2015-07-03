@@ -220,10 +220,8 @@ public class Crossover {
 
 		Set<Integer> posicoesPais = new LinkedHashSet<Integer>();
 
-		int pos = gerador.nextInt(100);
-
 		//Define quais posicoes serao pegas dos pais
-		for(int i = 0; i < pos; i++){
+		for(int i = 0; i < 50; i++){
 			boolean inseriu = posicoesPais.add(gerador.nextInt(100));
 			if (inseriu == false) i--;
 		}
@@ -363,15 +361,13 @@ public class Crossover {
 
 		Random gerador = new Random();
 
-		int pos = gerador.nextInt(100);
-
 		//Gerando Filho 1 - Filho 1 tera pai 2 como a ordem das selecionadas de um pai
 
 		//passo1:
 		//pegou quais s�o as posi��es aleat�rias do pai1 e inseriu em PosicaoPaiPrincipal
 		//Define quais posicoes sera pega do pai1
 		Set<Integer> PosicaoSortPaiPrincipal = new LinkedHashSet<Integer>();
-		for(int i = 0; i < pos; i++){
+		for(int i = 0; i < 50; i++){
 			boolean inseriu = PosicaoSortPaiPrincipal.add(gerador.nextInt(100));
 			if (!inseriu) i--;
 		}
