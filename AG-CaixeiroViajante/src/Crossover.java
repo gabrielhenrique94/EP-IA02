@@ -368,7 +368,7 @@ public class Crossover {
 		//Gerando Filho 1 - Filho 1 tera pai 2 como a ordem das selecionadas de um pai
 
 		//passo1:
-		//pegou quais sao as possiveis aleatorias do pai1 e inseriu em PosicaoPaiPrincipal
+		//pegou quais s�o as posi��es aleat�rias do pai1 e inseriu em PosicaoPaiPrincipal
 		//Define quais posicoes sera pega do pai1
 		Set<Integer> PosicaoSortPaiPrincipal = new LinkedHashSet<Integer>();
 		for(int i = 0; i < pos; i++){
