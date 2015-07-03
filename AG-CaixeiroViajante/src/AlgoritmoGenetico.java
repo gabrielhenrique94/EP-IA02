@@ -77,7 +77,7 @@ public class AlgoritmoGenetico {
 
 			FileWriter fw = new FileWriter(file.getAbsoluteFile());
 			BufferedWriter bw = new BufferedWriter(fw);
-			bw.write("fi;distancia\n");
+			bw.write("geracao;fi;distancia\n");
 			int t = 0;
 			System.out.println("Gerações: " + geracoesMaximas);
 			ArrayList<Cromossomo> geracaoFinal = selecionaNovaPopulacao(this.getPopulacao(), this.mapaCidades);
@@ -86,7 +86,7 @@ public class AlgoritmoGenetico {
 				System.out.println("Geraçao: " + t + " Populacao: " + geracaoFinal.size());
 				geracaoFinal = selecionaNovaPopulacao(geracaoFinal, this.mapaCidades);
 				Cromossomo vencedor = Selecao.melhorIndividuo(geracaoFinal);
-				bw.write(vencedor.getFi() + ";" + vencedor.getDistancia() + ";");
+				bw.write(t + ";" + vencedor.getFi() + ";" + vencedor.getDistancia() + ";");
 				bw.write("\n");
 
 				t++;
