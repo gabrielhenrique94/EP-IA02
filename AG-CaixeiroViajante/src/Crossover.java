@@ -35,7 +35,7 @@ public class Crossover {
 				/* Filhos de todos crossovers */
 				subpopulacaoCrossover.addAll(Crossover.crossoverOX(cpai1, cpai2, mapaCidades));
 				subpopulacaoCrossover.addAll(Crossover.crossoverPBX(cpai1, cpai2, mapaCidades));
-				//subpopulacaoCrossover.addAll(Crossover.crossoverOBX(cpai1, cpai2, mapaCidades));
+				subpopulacaoCrossover.addAll(Crossover.crossoverOBX(cpai1, cpai2, mapaCidades));
 
 			}
 		}
@@ -444,7 +444,7 @@ public class Crossover {
 			AuxiliarInsercao.add(IteratorAuxiliar2.next());
 		}
 		Iterator<Integer> IteratorAuxiliarInsercao = AuxiliarInsercao.iterator();
-		for(int i = 0; i < 50; i++){
+		for(int i = 0; i < pos; i++){
 			IteratorAuxiliarInsercao.next();
 		}
 		for(int contador = 0; contador <= genotipoFilho1.length; contador++){
@@ -530,7 +530,7 @@ public class Crossover {
 			AuxiliarInsercao.add(IteratorAuxiliar2.next());
 		}
 		IteratorAuxiliarInsercao = AuxiliarInsercao.iterator();
-		for(int i = 0; i < 50; i++){
+		for(int i = 0; i < pos; i++){
 			IteratorAuxiliarInsercao.next();
 		}
 		for(int contador = 0; contador <= genotipoFilho1.length; contador++){
