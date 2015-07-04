@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 
 public class Selecao {
@@ -66,19 +67,43 @@ public class Selecao {
 	 * (pega o da frente)
 	 */
 	public static ArrayList<Cromossomo> selecaoRoletaRussaMelhor(ArrayList<Cromossomo> populacao, int n) {
+		System.out.println("ROLETA");
 		ArrayList<Cromossomo> novaPopulacao = new ArrayList<Cromossomo>();
 		Cromossomo melhorIndividuo = melhorIndividuo(populacao);
 		novaPopulacao.add(melhorIndividuo);
 		populacao.remove(melhorIndividuo);
 		int numIndividuos = 1;
 
-		while (numIndividuos != n) {
-			int aleatorio = Helpers.intAleatorio(0, populacao.size() - 1);
-			Cromossomo escolhido = populacao.get(aleatorio);
+		HashMap<Double, Cromossomo> fiAcumulado = new HashMap<Double, Cromossomo>();
+		double acumulador = 0;
 
-			novaPopulacao.add(escolhido);
-			populacao.remove(aleatorio);
-			numIndividuos++;
+		// Cria mapa com fi acumulado para o sorteio
+		for (int i = 0; i < populacao.size(); i++) {
+			acumulador = acumulador + populacao.get(i).getFi();
+			fiAcumulado.put(acumulador, populacao.get(i));
+
+		}
+
+		Random rd = new Random();
+		while (numIndividuos != n) {
+			// Aleatorio para escolha de individuo seguindo o fi acumulado
+			double aleatorio = acumulador * rd.nextDouble();
+			double chaveSelecionado = 0.0;
+			boolean verificaCromossomo = false;
+
+			for (double key: fiAcumulado.keySet()) {
+				if (!verificaCromossomo && key > aleatorio) {
+					chaveSelecionado = key;
+					verificaCromossomo = true;
+					break;
+				}
+			}
+
+			if (verificaCromossomo) {
+				novaPopulacao.add(fiAcumulado.get(chaveSelecionado));
+				fiAcumulado.remove(chaveSelecionado);
+				numIndividuos++;
+			}
 		}
 
 		return novaPopulacao;
