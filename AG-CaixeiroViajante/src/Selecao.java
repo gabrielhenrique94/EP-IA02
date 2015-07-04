@@ -56,6 +56,15 @@ public class Selecao {
 	 * @param n numero de individuos que devem ser selecionados
 	 * @return
 	 */
+	//tem de calcular o fitness acumulado
+	//random*fitness = 0 a 1 o random
+	/*
+	 * primeiro passo = soma o fitness acumulado
+	 * segundo = cria vetor com fitness acumulado
+	 * terceiro = seleciona um numero random * fitness acumulado
+	 * quarto = verifica que faixa ele cai e seleciona esse individuo
+	 * (pega o da frente)
+	 */
 	public static ArrayList<Cromossomo> selecaoRoletaRussaMelhor(ArrayList<Cromossomo> populacao, int n) {
 		ArrayList<Cromossomo> novaPopulacao = new ArrayList<Cromossomo>();
 		Cromossomo melhorIndividuo = melhorIndividuo(populacao);
