@@ -67,7 +67,6 @@ public class Selecao {
 	 * (pega o da frente)
 	 */
 	public static ArrayList<Cromossomo> selecaoRoletaRussaMelhor(ArrayList<Cromossomo> populacao, int n) {
-		System.out.println("ROLETA");
 		ArrayList<Cromossomo> novaPopulacao = new ArrayList<Cromossomo>();
 		Cromossomo melhorIndividuo = melhorIndividuo(populacao);
 		novaPopulacao.add(melhorIndividuo);

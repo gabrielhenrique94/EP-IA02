@@ -92,17 +92,30 @@ public class AlgoritmoGenetico {
 				t++;
 			}
 
-			for (int j = 1; j <= 3; j++) {
+			// Gera arquivo com populacao completa
+			String arqPop = "src/arquivos/populacao_final_g" + geracoesMaximas+"_pop"+ this.getPopulacao().size()+"_op"+ this.getOperadores().size() +".csv";
+			File filePop = new File(arqPop);
+
+			// if file doesnt exists, then create it
+			if (!filePop.exists()) {
+				filePop.createNewFile();
+			}
+
+			FileWriter fwpop = new FileWriter(filePop.getAbsoluteFile());
+			BufferedWriter bwpop = new BufferedWriter(fwpop);
+			bwpop.write("n;fi;distancia\n");
+
+
+			for (int j = 1; j <= numIndividuos; j++) {
 				Cromossomo vencedor = Selecao.melhorIndividuo(geracaoFinal);
 				System.out.println("Melhor Cromossomo "+ j);
-				for (int i = 0;i<vencedor.getGenotipo().size();i++) {
-					System.out.print(vencedor.getGenotipo().get(i)+" ");
-				}
+				bwpop.write(j + ";" + vencedor.getFi() + ";" + vencedor.getDistancia() + "\n");
 				System.out.println();
 				System.out.println("fi: "+ vencedor.getFi() + " distancia: " + vencedor.getDistancia());
 				geracaoFinal.remove(vencedor);
 			}
 			System.out.println("FIM GA");
+			bwpop.close();
 			bw.close();
 		} catch(Exception e) {
 			e.printStackTrace();
